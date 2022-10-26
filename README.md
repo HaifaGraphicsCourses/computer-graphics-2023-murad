@@ -1,14 +1,14 @@
 # Computer Graphics 203.3710
 ## Students Team data
 
-Name: 
+Name: Murad Murad
 
-Student Number: 
+Student Number: 1234456
 
 
-Name: 
+Name: Wesam Asli
 
-Student Number: 
+Student Number: 213380264
 
 ### Lecturer
 *Roi Poranne*

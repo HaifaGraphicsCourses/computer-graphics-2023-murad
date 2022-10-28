@@ -4,6 +4,7 @@
 
 #include "Renderer.h"
 #include "InitShader.h"
+#include <iostream>
 
 #define INDEX(width,x,y,c) ((x)+(y)*(width))*3+(c)
 #define Z_INDEX(width,x,y) ((x)+(y)*(width))
@@ -35,6 +36,62 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 {
 	// TODO: Implement bresenham algorithm
 	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+	//calculating range for line between start and end point
+	int dx, dy, p, x, y;
+	int x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y;
+	if (p1.x > p2.x)
+	{
+		swap(x0, x1);
+		swap(y0, y1);
+	}
+
+	dx = x1 - x0;
+	dy = y1 - y0;
+
+	x = x0;
+	y = y0;
+	int temp = y0;
+
+	if (dy < 0)
+		p = 2 * (-dy) - dx;
+	else
+	    p = 2 * dy - dx;
+
+	if (dy == 0)
+		temp = -1;
+	while (x <= x1 && temp != y1)
+	{
+		if (p >= 0)
+		{
+			PutPixel(x, y, color);
+			if (dy < 0)
+			{
+				y = y - 1;
+				p = p - (2 * dy) - 2 * dx;
+				temp--;
+			}
+			else if (dy >= 0)
+			{
+				y = y + 1;
+				p = p + 2 * dy - 2 * dx;
+				temp++;
+			}
+		}
+		else
+		{
+			PutPixel(x, y, color);
+			if (dy < 0)
+			{
+				p = p - 2 * dy;
+			}
+			else
+			{
+				p = p + 2 * dy;
+			}
+		}
+		if(dx != 0)
+			x = x + 1;
+	}
 }
 
 void Renderer::CreateBuffers(int w, int h)
@@ -174,7 +231,7 @@ void Renderer::Render(const Scene& scene)
 	int half_width = viewport_width / 2;
 	int half_height = viewport_height / 2;
 	// draw circle
-
+	DrawLine(glm::vec2(690, 360), glm::vec2(0, 0), glm::vec3(1, 0, 0));
 }
 
 int Renderer::GetViewportWidth() const

@@ -37,8 +37,8 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 	// TODO: Implement bresenham algorithm
 	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 	//calculating range for line between start and end point
-	int dx, dy, p, x, y;
-	int x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y;
+	float dx, dy, p, x, y;
+	float x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y;
 	if (p1.x > p2.x)
 	{
 		swap(x0, x1);
@@ -50,7 +50,6 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 
 	x = x0;
 	y = y0;
-	int temp = y0;
 
 	if (dy < 0)
 		p = 2 * (-dy) - dx;
@@ -58,39 +57,53 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 	    p = 2 * dy - dx;
 
 	if (dy == 0)
-		temp = -1;
-	while (x <= x1 && temp != y1)
 	{
-		if (p >= 0)
+		while (x <= x1)
 		{
 			PutPixel(x, y, color);
-			if (dy < 0)
-			{
-				y = y - 1;
-				p = p - (2 * dy) - 2 * dx;
-				temp--;
-			}
-			else if (dy >= 0)
-			{
-				y = y + 1;
-				p = p + 2 * dy - 2 * dx;
-				temp++;
-			}
+			x++;
 		}
-		else
+	}
+
+	else if (dx == 0)
+	{
+		while (y != y1)
 		{
 			PutPixel(x, y, color);
-			if (dy < 0)
+			if (dy > 0)
+				y++;
+			else
+				y--;
+		}
+	}
+
+	else {
+		while (x <= x1)
+		{
+			if (p >= 0)
 			{
-				p = p - 2 * dy;
+				PutPixel(x, y, color);
+				if (dy < 0)
+				{
+					y = y - 1;
+					p = p - (2 * dy) - 2 * dx;
+				}
+				else if (dy >= 0)
+				{
+					y = y + 1;
+					p = p + 2 * dy - 2 * dx;
+				}
 			}
 			else
 			{
-				p = p + 2 * dy;
+				PutPixel(x, y, color);
+				if (dy < 0)
+					p = p - 2 * dy;
+				else
+					p = p + 2 * dy;
 			}
-		}
-		if(dx != 0)
 			x = x + 1;
+		}
 	}
 }
 
@@ -231,8 +244,15 @@ void Renderer::Render(const Scene& scene)
 	int half_width = viewport_width / 2;
 	int half_height = viewport_height / 2;
 	// draw circle
-	DrawLine(glm::vec2(690, 360), glm::vec2(0, 0), glm::vec3(1, 0, 0));
+	for (int r = 0; r <= 360; r += 45)
+	{
+		float temp = r * M_PI / 180;
+		float x = 690 + 300 * cos(temp);
+		float y = 360 + 300 * sin(temp);
+		DrawLine(glm::vec2(690, 360), glm::vec2(x, y), glm::vec3(1, 0, 0));
+	}
 }
+
 
 int Renderer::GetViewportWidth() const
 {

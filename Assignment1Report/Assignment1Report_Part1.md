@@ -1,4 +1,4 @@
-## mplementation of the algorithm.
+## implementation of the algorithm.
 	void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 	int dx, dy, p, x, y;
 	int x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y; // for easier use

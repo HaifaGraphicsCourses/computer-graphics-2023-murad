@@ -37,8 +37,8 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 	// TODO: Implement bresenham algorithm
 	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 	//calculating range for line between start and end point
-	float dx, dy, p, x, y;
-	float x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y;
+	int dx, dy, p, x, y;
+	int x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y;
 	if (p1.x > p2.x)
 	{
 		swap(x0, x1);
@@ -51,21 +51,7 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 	x = x0;
 	y = y0;
 
-	if (dy < 0)
-		p = 2 * (-dy) - dx;
-	else
-	    p = 2 * dy - dx;
-
-	if (dy == 0)
-	{
-		while (x <= x1)
-		{
-			PutPixel(x, y, color);
-			x++;
-		}
-	}
-
-	else if (dx == 0)
+	if (dx == 0)
 	{
 		while (y != y1)
 		{
@@ -77,7 +63,36 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 		}
 	}
 
+	else if (abs(dy) > abs(dx))
+	{
+		p = 2 * dx - dy;
+		while (y != y1)
+		{
+			if (p >= 0)
+			{
+				PutPixel(x, y, color);
+				{
+					x = x + 1;
+					p = p + 2 * dx - 2 * abs(dy);
+				}
+			}
+			else
+			{
+				PutPixel(x, y, color);
+					p = p + 2 * dx;
+			}
+			if (dy > 0)
+				y = y + 1;
+			else
+				y = y - 1;
+		}
+	}
+
 	else {
+		if (dy < 0)
+			p = 2 * (-dy) - dx;
+		else
+			p = 2 * dy - dx;
 		while (x <= x1)
 		{
 			if (p >= 0)
@@ -244,13 +259,18 @@ void Renderer::Render(const Scene& scene)
 	int half_width = viewport_width / 2;
 	int half_height = viewport_height / 2;
 	// draw circle
-	for (int r = 0; r <= 360; r += 45)
+	for (int r = 0; r <= 360; r += 1)
 	{
 		float temp = r * M_PI / 180;
-		float x = 690 + 300 * cos(temp);
-		float y = 360 + 300 * sin(temp);
+		int x = 690 + 300 * cos(temp);
+		int y = 360 + 300 * sin(temp);
 		DrawLine(glm::vec2(690, 360), glm::vec2(x, y), glm::vec3(1, 0, 0));
 	}
+	/*DrawLine(glm::vec2(690, 360), glm::vec2(840, 619), glm::vec3(1, 0, 0));
+	DrawLine(glm::vec2(690, 360), glm::vec2(767, 649), glm::vec3(0, 0, 0));
+	DrawLine(glm::vec2(690, 360), glm::vec2(690, 660), glm::vec3(1, 0, 0));
+	DrawLine(glm::vec2(690, 360), glm::vec2(902, 572), glm::vec3(1, 0, 0));
+	DrawLine(glm::vec2(690, 360), glm::vec2(949, 510), glm::vec3(1, 0, 0));*/
 }
 
 

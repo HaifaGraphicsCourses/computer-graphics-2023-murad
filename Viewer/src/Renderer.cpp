@@ -38,8 +38,8 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 	//calculating range for line between start and end point
 	int dx, dy, p, x, y;
-	int x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y;
-	if (p1.x > p2.x)
+	int x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y; // for easier use
+	if (p1.x > p2.x) // if x0 > x1 wh swap points
 	{
 		swap(x0, x1);
 		swap(y0, y1);
@@ -51,7 +51,7 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 	x = x0;
 	y = y0;
 
-	if (dx == 0)
+	if (dx == 0) // for straight lines
 	{
 		while (y != y1)
 		{
@@ -63,7 +63,7 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 		}
 	}
 
-	else if (abs(dy) > abs(dx))
+	else if (abs(dy) > abs(dx)) // if y difference is greater than x difference we use this breshman algo for slopes greater than 1
 	{
 		p = 2 * dx - dy;
 		while (y != y1)
@@ -81,41 +81,32 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 				PutPixel(x, y, color);
 					p = p + 2 * dx;
 			}
-			if (dy > 0)
+			if (dy > 0) // we move up if slope is positive and down if negative
 				y = y + 1;
 			else
 				y = y - 1;
 		}
 	}
 
-	else {
-		if (dy < 0)
-			p = 2 * (-dy) - dx;
-		else
-			p = 2 * dy - dx;
+	else { // else we use this algo for slopes smaller than one
+			p = 2 * abs(dy) - dx;
 		while (x <= x1)
 		{
 			if (p >= 0)
 			{
 				PutPixel(x, y, color);
-				if (dy < 0)
-				{
+				if (dy < 0) // we check if slope is negative to move up or down
 					y = y - 1;
-					p = p - (2 * dy) - 2 * dx;
-				}
-				else if (dy >= 0)
-				{
+				else
 					y = y + 1;
-					p = p + 2 * dy - 2 * dx;
-				}
+
+				p = p + 2 * abs(dy) - 2 * dx;
 			}
 			else
 			{
 				PutPixel(x, y, color);
-				if (dy < 0)
-					p = p - 2 * dy;
-				else
-					p = p + 2 * dy;
+
+				p = p + 2 * abs(dy);
 			}
 			x = x + 1;
 		}
@@ -259,18 +250,13 @@ void Renderer::Render(const Scene& scene)
 	int half_width = viewport_width / 2;
 	int half_height = viewport_height / 2;
 	// draw circle
-	for (int r = 0; r <= 360; r += 1)
+	for (int r = 0; r <= 360; r += 1) // step size
 	{
-		float temp = r * M_PI / 180;
+		float temp = r * M_PI / 180; // degree to radian
 		int x = 690 + 300 * cos(temp);
 		int y = 360 + 300 * sin(temp);
-		DrawLine(glm::vec2(690, 360), glm::vec2(x, y), glm::vec3(1, 0, 0));
+		DrawLine(glm::vec2(690, 360), glm::vec2(x, y), glm::vec3(0, 0, 0));
 	}
-	/*DrawLine(glm::vec2(690, 360), glm::vec2(840, 619), glm::vec3(1, 0, 0));
-	DrawLine(glm::vec2(690, 360), glm::vec2(767, 649), glm::vec3(0, 0, 0));
-	DrawLine(glm::vec2(690, 360), glm::vec2(690, 660), glm::vec3(1, 0, 0));
-	DrawLine(glm::vec2(690, 360), glm::vec2(902, 572), glm::vec3(1, 0, 0));
-	DrawLine(glm::vec2(690, 360), glm::vec2(949, 510), glm::vec3(1, 0, 0));*/
 }
 
 

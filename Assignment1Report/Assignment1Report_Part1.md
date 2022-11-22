@@ -1,9 +1,5 @@
-## mplementation of the algorithm.
-void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
-{
-	// TODO: Implement bresenham algorithm
-	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-	//calculating range for line between start and end point
+## implementation of the algorithm.
+	void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 	int dx, dy, p, x, y;
 	int x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y; // for easier use
 	if (p1.x > p2.x) // if x0 > x1 wh swap points
@@ -79,3 +75,8 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 		}
 	}
 }
+## pictures of the sanity check results
+![Mesh Viewer 10_29_2022 9_57_13 PM](https://user-images.githubusercontent.com/115185916/198848395-0d661ec4-6e5a-4f75-adc4-fd6fd2279829.png)
+![Mesh Viewer 10_29_2022 9_56_49 PM](https://user-images.githubusercontent.com/115185916/198848406-97b5b873-126a-4c80-b3c2-5a12e1b184ed.png)
+## creative drawing of my choice
+![Mesh Viewer 10_29_2022 10_37_46 PM](https://user-images.githubusercontent.com/115185916/198849781-c30c56e1-7d63-4614-85f6-39b640112bfb.png)

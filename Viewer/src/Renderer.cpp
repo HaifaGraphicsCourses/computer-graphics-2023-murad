@@ -250,12 +250,19 @@ void Renderer::Render(const Scene& scene)
 	int half_width = viewport_width / 2;
 	int half_height = viewport_height / 2;
 	// draw circle
-	for (int r = 0; r <= 360; r += 1) // step size
+	auto count = scene.GetModelCount();
+	if (count > 0)
 	{
-		float temp = r * M_PI / 180; // degree to radian
-		int x = 690 + 300 * cos(temp);
-		int y = 360 + 300 * sin(temp);
-		DrawLine(glm::vec2(690, 360), glm::vec2(x, y), glm::vec3(0, 0, 0));
+		auto mesh = scene.GetModel(0);
+		auto faceCount = mesh.GetFacesCount();
+		for (int i = 0; i < faceCount; i++)
+		{
+			auto face = mesh.GetFace(i);
+			cout << "face " << i << ": ";
+			cout << face.GetVertexIndex(0) << " ";
+			cout << face.GetVertexIndex(1) << " ";
+			cout << face.GetVertexIndex(2) << endl;
+		}
 	}
 }
 

@@ -239,9 +239,10 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	}
 	
 	{
-		static float f = 0.0f;
+		static float f = 1.0f;
 		ImGui::Begin("Hello");
-		ImGui::SliderFloat("float", &f, 0, 1);
+		ImGui::SliderFloat("X", &f, 0, scene.GetModelCount());
+		scene.scalex = f;
 		ImGui::End();
 	}
 

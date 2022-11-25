@@ -67,20 +67,7 @@ std::shared_ptr<MeshModel> Utils::LoadMeshModel(const std::string& filePath)
 			std::cout << "Found unknown line Type \"" << lineType << "\"";
 		}
 	}
-float m = 0;
-float n = 0;
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		
-		m = std::max(m, vertices[i].x);
-		m = std::max(m, vertices[i].y);
-	}
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		vertices[i].x = vertices[i].x * 200 / m + 640.0;
-		vertices[i].y = vertices[i].y * 200 / m + 360.0;
-		vertices[i].z = vertices[i].z;
-	}
+
 	return std::make_shared<MeshModel>(faces, vertices, normals, Utils::GetFileName(filePath));
 }
 

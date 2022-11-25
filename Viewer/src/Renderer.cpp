@@ -6,6 +6,7 @@
 #include "InitShader.h"
 #include <iostream>
 #include<glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #define INDEX(width,x,y,c) ((x)+(y)*(width))*3+(c)
 #define Z_INDEX(width,x,y) ((x)+(y)*(width))
@@ -256,67 +257,22 @@ void Renderer::Render(const Scene& scene)
 	{
 		auto mesh = scene.GetModel(0);
 		auto faceCount = mesh.GetFacesCount();
-
 		for (int i = 0; i < faceCount; i++)
 		{
-			auto face = mesh.GetFace(i); 
-			DrawLine(glm::vec2(mesh.GetVertex(face.GetVertexIndex(0) - 1).x, mesh.GetVertex(face.GetVertexIndex(0) - 1).y),
-				glm::vec2(mesh.GetVertex(face.GetVertexIndex(2) - 1).x, mesh.GetVertex(face.GetVertexIndex(2) - 1).y) ,
-				glm::vec3(0, 0, 0));
-			DrawLine(glm::vec2(mesh.GetVertex(face.GetVertexIndex(0) - 1).x, mesh.GetVertex(face.GetVertexIndex(0) - 1).y),
-				glm::vec2(mesh.GetVertex(face.GetVertexIndex(1) - 1).x, mesh.GetVertex(face.GetVertexIndex(1) - 1).y),
-				glm::vec3(0, 0, 0));
-			DrawLine(glm::vec2(mesh.GetVertex(face.GetVertexIndex(2) - 1).x, mesh.GetVertex(face.GetVertexIndex(2) - 1).y),
-				glm::vec2(mesh.GetVertex(face.GetVertexIndex(1) - 1).x, mesh.GetVertex(face.GetVertexIndex(1) - 1).y),
-				glm::vec3(0, 0, 0));
+			auto face = mesh.GetFace(i);
+			auto v1 =  mesh.GetVertex((face.GetVertexIndex(0) - 1));
+			auto v2 =  mesh.GetVertex((face.GetVertexIndex(1) - 1));
+			auto v3 =  mesh.GetVertex((face.GetVertexIndex(2) - 1));
+			v1 = mesh.translate() * mesh.scale(scene.scalex) * v1;
+			v2 = mesh.translate() * mesh.scale(scene.scalex) * v2;
+			v3 = mesh.translate() * mesh.scale(scene.scalex) * v3;
+			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v2.x, v2.y),glm::vec3(0, 0, 0));
+			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
+			DrawLine(glm::vec2(v2.x, v2.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
 		}
 	}
 }
 
-void Renderer::Translate(const Scene& scene) const
-{
-	float X, Y, Z;
-
-	auto count = scene.GetModelCount();
-	if (count > 0)
-	{
-		auto mesh = scene.GetModel(0);
-		auto faceCount = mesh.GetFacesCount();
-		for (int i = 0; i < faceCount; i++)
-		{
-			auto Myvector = mesh.GetVertex(i);
-			Myvector.x += (GetViewportWidth() / 2);
-			Myvector.y += (GetViewportHeight() / 2);
-			Myvector.z += 1.0;
-			glm::mat4 MyMatrix = { 1,0,0,4,0,1,0,5,0,0,1,3,0,0,0,1 };
-			glm::vec4 tranformedVec = MyMatrix * glm::vec4(Myvector, 1.0f);
-
-			//DrawLine();
-		}
-
-	}
-}
-void Renderer::Scale(const Scene& scene) const
-{
-	float X, Y, Z;
-	auto count = scene.GetModelCount();
-	if (count > 0)
-	{
-		auto mesh = scene.GetModel(0);
-		auto faceCount = mesh.GetFacesCount();
-		for (int i = 0; i < faceCount; i++)
-		{
-			auto Myvector = mesh.GetVertex(i);
-			Myvector.x += (GetViewportWidth() / 2);
-			Myvector.y += (GetViewportHeight() / 2);
-			Myvector.z += 1.0;
-			glm::mat4 MyMatrix = { 4,0,0,0,0,3,0,0,0,0,2,0,0,0,0,1 };
-			glm::vec4 tranformedVec = MyMatrix * glm::vec4(Myvector, 1.0f);
-			//DrawLine();
-		}
-
-	}
-}
 
 int Renderer::GetViewportWidth() const
 {

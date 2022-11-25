@@ -27,6 +27,8 @@ public:
 
 	void SetActiveModelIndex(int index);
 	int GetActiveModelIndex() const;
+
+	float scalex = 1.0f;
 	
 private:
 	vector<shared_ptr<MeshModel>> mesh_models;

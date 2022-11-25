@@ -203,7 +203,6 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	// Controls
 	ImGui::ColorEdit3("Clear Color", (float*)&clear_color);
 	// TODO: Add more controls as needed
-	
 	ImGui::End();
 
 	/**
@@ -233,9 +232,19 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SameLine();
 		ImGui::Text("counter = %d", counter);
 
+		
+
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 	}
+	
+	{
+		static float f = 0.0f;
+		ImGui::Begin("Hello");
+		ImGui::SliderFloat("float", &f, 0, 1);
+		ImGui::End();
+	}
+
 
 	// 3. Show another simple window.
 	if (show_another_window)

@@ -38,8 +38,8 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 	// TODO: Implement bresenham algorithm
 	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 	//calculating range for line between start and end point
-	int dx, dy, p, x, y;
-	int x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y; // for easier use
+	float dx, dy, p, x, y;
+	float x0 = p1.x, y0 = p1.y, x1 = p2.x, y1 = p2.y; // for easier use
 	if (p1.x > p2.x) // if x0 > x1 wh swap points
 	{
 		swap(x0, x1);
@@ -259,15 +259,20 @@ void Renderer::Render(const Scene& scene)
 
 		for (int i = 0; i < faceCount; i++)
 		{
-			auto face = mesh.GetFace(i);
-			cout << "face " << i << ": ";
-			cout << face.GetVertexIndex(0) << " ";
-			cout << face.GetVertexIndex(1) << " ";
-			//DrawLine();
+			auto face = mesh.GetFace(i); 
+			DrawLine(glm::vec2(mesh.GetVertex(face.GetVertexIndex(0) - 1).x, mesh.GetVertex(face.GetVertexIndex(0) - 1).y),
+				glm::vec2(mesh.GetVertex(face.GetVertexIndex(2) - 1).x, mesh.GetVertex(face.GetVertexIndex(2) - 1).y) ,
+				glm::vec3(0, 0, 0));
+			DrawLine(glm::vec2(mesh.GetVertex(face.GetVertexIndex(0) - 1).x, mesh.GetVertex(face.GetVertexIndex(0) - 1).y),
+				glm::vec2(mesh.GetVertex(face.GetVertexIndex(1) - 1).x, mesh.GetVertex(face.GetVertexIndex(1) - 1).y),
+				glm::vec3(0, 0, 0));
+			DrawLine(glm::vec2(mesh.GetVertex(face.GetVertexIndex(2) - 1).x, mesh.GetVertex(face.GetVertexIndex(2) - 1).y),
+				glm::vec2(mesh.GetVertex(face.GetVertexIndex(1) - 1).x, mesh.GetVertex(face.GetVertexIndex(1) - 1).y),
+				glm::vec3(0, 0, 0));
 		}
 	}
-	
 }
+
 void Renderer::Translate(const Scene& scene) const
 {
 	float X, Y, Z;
@@ -280,12 +285,12 @@ void Renderer::Translate(const Scene& scene) const
 		for (int i = 0; i < faceCount; i++)
 		{
 			auto Myvector = mesh.GetVertex(i);
-			Myvector.x += (GetViewportWidth()/2);
-			Myvector.y += (GetViewportHeight()/ 2);
+			Myvector.x += (GetViewportWidth() / 2);
+			Myvector.y += (GetViewportHeight() / 2);
 			Myvector.z += 1.0;
 			glm::mat4 MyMatrix = { 1,0,0,4,0,1,0,5,0,0,1,3,0,0,0,1 };
-			glm::vec4 tranformedVec = MyMatrix * glm::vec4(Myvector,1.0f);
-			
+			glm::vec4 tranformedVec = MyMatrix * glm::vec4(Myvector, 1.0f);
+
 			//DrawLine();
 		}
 
@@ -312,7 +317,6 @@ void Renderer::Scale(const Scene& scene) const
 
 	}
 }
-
 
 int Renderer::GetViewportWidth() const
 {

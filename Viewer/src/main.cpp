@@ -12,6 +12,7 @@
 #include "Renderer.h"
 #include "Scene.h"
 #include "Utils.h"
+#include <iostream>
 
 /**
  * Fields
@@ -238,6 +239,15 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 	}
+
+	{
+		static int active = 0;
+		static const char* models[] = { "model 1","model 2", "model 3", "model 4", "model 5", "model 6", "model 7",
+		"model 8", "model 9", "model 10" };
+		ImGui::Begin("Active model");
+		ImGui::ListBox("models", &active, models, scene.GetModelCount());
+		scene.SetActiveModelIndex(active);
+	}
 	
 	{
 		static float f = 1.0f;
@@ -250,8 +260,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		{
 			if (scene.GetModelCount() > 0)
 			{
-				ImGui::SliderFloat("X", &scene.GetModel(0).scalex, 0, 2.0f);
-				ImGui::SliderFloat("Y", &scene.GetModel(0).scaley, 0, 2.0f);
+				ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).scalex, 0, 2.0f);
+				ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).scaley, 0, 2.0f);
 				ImGui::SliderFloat("Z", &f, 0, 2.0f);
 			}
 		}
@@ -259,8 +269,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		{
 			if (scene.GetModelCount() > 0)
 			{
-				ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
-				ImGui::SliderFloat("Y", &scene.GetModel(0).translatey, -340, 340);
+				ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).translatex, -680, 680);
+				ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).translatey, -340, 340);
 				ImGui::SliderFloat("Z", &f, -340, 340);
 			}
 		}
@@ -269,7 +279,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (scene.GetModelCount() > 0)
 			{
 				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
-				ImGui::SliderFloat("rotate", &scene.GetModel(0).rotate, 0.0f, 360.0f );
+				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).rotate, 0.0f, 360.0f );
 			}
 		}
 		ImGui::End();
@@ -286,8 +296,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		{
 			if (scene.GetModelCount() > 0)
 			{
-				ImGui::SliderFloat("X", &scene.GetModel(0).Wscalex, 0, 2.0f);
-				ImGui::SliderFloat("Y", &scene.GetModel(0).Wscaley, 0, 2.0f);
+				ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).Wscalex, 0, 2.0f);
+				ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).Wscaley, 0, 2.0f);
 				ImGui::SliderFloat("Z", &f, 0, 2.0f);
 			}
 		}
@@ -295,8 +305,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		{
 			if (scene.GetModelCount() > 0)
 			{
-				ImGui::SliderFloat("X", &scene.GetModel(0).Wtranslatex, -680, 680);
-				ImGui::SliderFloat("Y", &scene.GetModel(0).Wtranslatey, -340, 340);
+				ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).Wtranslatex, -680, 680);
+				ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).Wtranslatey, -340, 340);
 				ImGui::SliderFloat("Z", &f, -340, 340);
 			}
 		}
@@ -305,7 +315,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (scene.GetModelCount() > 0)
 			{
 				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
-				ImGui::SliderFloat("rotate", &scene.GetModel(0).Wrotate, 0.0f, 360.0f);
+				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).Wrotate, 0.0f, 360.0f);
 			}
 		}
 		ImGui::End();

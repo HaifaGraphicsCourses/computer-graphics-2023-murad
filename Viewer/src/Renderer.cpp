@@ -255,7 +255,8 @@ void Renderer::Render(const Scene& scene)
 	auto count = scene.GetModelCount();
 	if (count > 0)
 	{
-		auto mesh = scene.GetModel(0);
+		int active = scene.GetActiveModelIndex();
+		auto mesh = scene.GetModel(active);
 		auto faceCount = mesh.GetFacesCount();
 		for (int i = 0; i < faceCount; i++)
 		{

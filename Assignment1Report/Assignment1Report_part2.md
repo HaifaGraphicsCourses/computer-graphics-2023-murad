@@ -11,3 +11,10 @@ every mesh have different vertices range so we cant use the same scale for every
 ![Mesh Viewer 11_25_2022 6_36_52 PM](https://user-images.githubusercontent.com/115185916/204026960-e7b63eb0-7954-4ce3-bb20-cdcadfe58097.png)
 ![Mesh Viewer 11_25_2022 6_37_24 PM](https://user-images.githubusercontent.com/115185916/204026970-da66e3fd-1ab5-4b84-9112-13650d739a8d.png)
 ![Mesh Viewer 11_25_2022 6_42_03 PM](https://user-images.githubusercontent.com/115185916/204027536-5aaeca0d-f701-48e5-a770-e9e4dcc40871.png)
+
+## Create GUI items to specify the local and world transformations that should be applied to the mode:
+![Mesh Viewer 11_26_2022 6_26_28 PM](https://user-images.githubusercontent.com/115185916/204098849-0739a495-33a8-4bb5-81f8-e49ee9b48bac.png)
+![Mesh Viewer 11_26_2022 6_26_11 PM](https://user-images.githubusercontent.com/115185916/204098850-94ebd185-2090-44cb-bbaa-e800387c619a.png)
+![Mesh Viewer 11_26_2022 6_26_19 PM](https://user-images.githubusercontent.com/115185916/204098851-1c9ffad4-c0c2-4654-a364-f45528e95afc.png)
+a simple UI there are two windows one for the local transformations and one for the world transfoermations each window has 3 choises scale, translate and rotate.
+the UI controls controls the value saved in the mesh itself wich allows us to apply the transformations in each frame independently in real time and see the transformations happening. to apply the transformations we create a glm::vec4 with wich has (v.x, v.y, v.z, 1) for every vertice and 6 4x4 matrices for the wolrd and local transformations, and apply them this way (WorldTranslate * WorldRotate * WorldScale) * (LocalTranslate * LocalRotate * localScale) * ourVector for every vertice. for some reason if we apply the scale and translate to vertices such that they will fit inside our window there will be a bug so the only way it works right is to apply the scale with the local scale and the translate with the world translate.

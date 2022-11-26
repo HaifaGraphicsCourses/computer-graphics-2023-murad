@@ -2,6 +2,11 @@
 #include <iostream>
 using namespace std;
 #include <glm/gtx/transform.hpp>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <math.h>
+
+
 
 MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, std::vector<glm::vec3> normals, const std::string& model_name) :
 	faces(faces),
@@ -50,36 +55,42 @@ const float MeshModel::getMax() const
 	return m;
 }
 
-glm::mat4x4 MeshModel::scale(float x, int y, int z)
+glm::mat4x4 MeshModel::scale()
 {
 	float max = getMax();
-	float s = 300.0 / max;
-	return glm::mat4x4(x * s,0, 0, 0, 0, y * s, 0, 0, 0, 0, z * s , 0, 0, 0, 0, 1);
+	float s = 200.0 / max;
+	return glm::mat4x4(scalex * s,0, 0, 0, 0, scaley * s, 0, 0, 0, 0, s , 0, 0, 0, 0, 1);
 }
 
 
 
-glm::mat4x4 MeshModel::translate(int x, int y, int z)
+glm::mat4x4 MeshModel::translate()
 {
-	return glm::translate(glm::mat4(1.0f), glm::vec3(x + 640, y + 340, z + 0));
+	return glm::translate(glm::mat4(1.0f), glm::vec3(translatex, translatey, 0));
 }
 
-glm::mat4x4 MeshModel::scaletofit()
+glm::mat4x4 MeshModel::localrotate()
 {
-	float max = getMax();
-	float s = 300.0 / max;
-	return glm::mat4x4( s, 0, 0, 0, 0, s, 0, 0, 0, 0, s, 0, 0, 0, 0, 1);
+	float o = -rotate * M_PI / 180;
+	return glm::mat4x4(cos(o),-sin(o),0,0,sin(o),cos(o),0,0,0,0,1,0,0,0,0,1);
 }
 
-glm::mat4x4 MeshModel::translatetofit()
+glm::mat4x4 MeshModel::Wscale()
 {
-	return glm::translate(glm::mat4(1.0f), glm::vec3(640, 340, 0));
+	return glm::mat4x4(Wscalex, 0, 0, 0, 0, Wscaley, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 }
 
-void MeshModel::update(int x)
+glm::mat4x4 MeshModel::Wtranslate()
 {
-	scalex = x;
+	return glm::translate(glm::mat4(1.0f), glm::vec3(Wtranslatex + 640, Wtranslatey + 340, 0));
 }
+
+glm::mat4x4 MeshModel::Wlocalrotate()
+{
+	float o = -Wrotate * M_PI / 180;
+	return glm::mat4x4(cos(o), -sin(o), 0, 0, sin(o), cos(o), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+}
+
 
 int MeshModel::GetFacesCount() const
 {

@@ -18,6 +18,7 @@
  */
 bool show_demo_window = false;
 bool show_another_window = false;
+bool scale = false;
 glm::vec4 clear_color = glm::vec4(0.8f, 0.8f, 0.8f, 1.00f);
 
 /**
@@ -240,9 +241,73 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	
 	{
 		static float f = 1.0f;
-		ImGui::Begin("Hello");
-		ImGui::SliderFloat("X", &f, 0, scene.GetModelCount());
-		scene.scalex = f;
+		ImGui::Begin("Local transformations");
+		static int e = 0;
+		ImGui::RadioButton("scale", &e, 0); ImGui::SameLine();
+		ImGui::RadioButton("translate", &e, 1); ImGui::SameLine();
+		ImGui::RadioButton("rotate", &e, 2);
+		if (e == 0)
+		{
+			if (scene.GetModelCount() > 0)
+			{
+				ImGui::SliderFloat("X", &scene.GetModel(0).scalex, 0, 2.0f);
+				ImGui::SliderFloat("Y", &scene.GetModel(0).scaley, 0, 2.0f);
+				ImGui::SliderFloat("Z", &f, 0, 2.0f);
+			}
+		}
+		if (e == 1)
+		{
+			if (scene.GetModelCount() > 0)
+			{
+				ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
+				ImGui::SliderFloat("Y", &scene.GetModel(0).translatey, -340, 340);
+				ImGui::SliderFloat("Z", &f, -340, 340);
+			}
+		}
+		if (e == 2)
+		{
+			if (scene.GetModelCount() > 0)
+			{
+				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
+				ImGui::SliderFloat("rotate", &scene.GetModel(0).rotate, 0.0f, 360.0f );
+			}
+		}
+		ImGui::End();
+	}
+
+	{
+		static float f = 1.0f;
+		ImGui::Begin("World transformations");
+		static int e = 0;
+		ImGui::RadioButton("scale", &e, 0); ImGui::SameLine();
+		ImGui::RadioButton("translate", &e, 1); ImGui::SameLine();
+		ImGui::RadioButton("rotate", &e, 2);
+		if (e == 0)
+		{
+			if (scene.GetModelCount() > 0)
+			{
+				ImGui::SliderFloat("X", &scene.GetModel(0).Wscalex, 0, 2.0f);
+				ImGui::SliderFloat("Y", &scene.GetModel(0).Wscaley, 0, 2.0f);
+				ImGui::SliderFloat("Z", &f, 0, 2.0f);
+			}
+		}
+		if (e == 1)
+		{
+			if (scene.GetModelCount() > 0)
+			{
+				ImGui::SliderFloat("X", &scene.GetModel(0).Wtranslatex, -680, 680);
+				ImGui::SliderFloat("Y", &scene.GetModel(0).Wtranslatey, -340, 340);
+				ImGui::SliderFloat("Z", &f, -340, 340);
+			}
+		}
+		if (e == 2)
+		{
+			if (scene.GetModelCount() > 0)
+			{
+				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
+				ImGui::SliderFloat("rotate", &scene.GetModel(0).Wrotate, 0.0f, 360.0f);
+			}
+		}
 		ImGui::End();
 	}
 

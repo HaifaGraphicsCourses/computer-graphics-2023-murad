@@ -263,9 +263,12 @@ void Renderer::Render(const Scene& scene)
 			auto v1 =  mesh.GetVertex((face.GetVertexIndex(0) - 1));
 			auto v2 =  mesh.GetVertex((face.GetVertexIndex(1) - 1));
 			auto v3 =  mesh.GetVertex((face.GetVertexIndex(2) - 1));
-			v1 = mesh.translate() * mesh.scale(scene.scalex) * v1;
-			v2 = mesh.translate() * mesh.scale(scene.scalex) * v2;
-			v3 = mesh.translate() * mesh.scale(scene.scalex) * v3;
+			v1 =  mesh.translate() * mesh.localrotate() * mesh.scale() * v1;
+			v2 =  mesh.translate() * mesh.localrotate() * mesh.scale() * v2;
+			v3 =  mesh.translate() * mesh.localrotate() * mesh.scale() * v3;
+			v1 = mesh.Wtranslate() * mesh.Wlocalrotate() * mesh.Wscale() * v1;
+			v2 = mesh.Wtranslate() * mesh.Wlocalrotate() * mesh.Wscale() * v2;
+			v3 = mesh.Wtranslate() * mesh.Wlocalrotate() * mesh.Wscale() * v3;
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v2.x, v2.y),glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v2.x, v2.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));

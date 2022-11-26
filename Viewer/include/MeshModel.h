@@ -13,15 +13,26 @@ public:
 	const std::string& GetModelName() const;
 	const glm::vec4 GetVertex(int index) const;
 	const float getMax() const;
-	glm::mat4x4 scale(float x = 1, int y = 1, int z = 1);
-	glm::mat4x4 translate(int x = 0, int y = 0, int z = 0);
-	glm::mat4x4 scaletofit();
-	glm::mat4x4 translatetofit();
-	void update(int x);
+	glm::mat4x4 scale();
+	glm::mat4x4 translate();
+	glm::mat4x4 localrotate();
+	glm::mat4x4 Wscale();
+	glm::mat4x4 Wtranslate();
+	glm::mat4x4 Wlocalrotate();
+	float scalex = 1.0f;
+	float scaley = 1.0f;
+	float translatex = 0.0f;
+	float translatey = 0.0f;
+	float rotate = 0.0f;
+	float Wscalex = 1.0f;
+	float Wscaley = 1.0f;
+	float Wtranslatex = 0.0f;
+	float Wtranslatey = 0.0f;
+	float Wrotate = 0.0f;
 private:
 	std::vector<Face> faces;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
 	std::string model_name;
-	int scalex = 1;
+	
 };

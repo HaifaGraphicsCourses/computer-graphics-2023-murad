@@ -18,3 +18,11 @@ every mesh have different vertices range so we cant use the same scale for every
 ![Mesh Viewer 11_26_2022 6_26_19 PM](https://user-images.githubusercontent.com/115185916/204098851-1c9ffad4-c0c2-4654-a364-f45528e95afc.png)
 a simple UI there are two windows one for the local transformations and one for the world transfoermations each window has 3 choises scale, translate and rotate.
 the UI controls controls the value saved in the mesh itself wich allows us to apply the transformations in each frame independently in real time and see the transformations happening. to apply the transformations we create a glm::vec4 with wich has (v.x, v.y, v.z, 1) for every vertice and 6 4x4 matrices for the wolrd and local transformations, and apply them this way (WorldTranslate * WorldRotate * WorldScale) * (LocalTranslate * LocalRotate * localScale) * ourVector for every vertice. for some reason if we apply the scale and translate to vertices such that they will fit inside our window there will be a bug so the only way it works right is to apply the scale with the local scale and the translate with the world translate.
+
+## Show two screenshots comparing thedifference between translating in the model frame and then rotating in the world frame,vs. translating in the world frame and then rotating in the local frame.
+
+local translate and then world rotate:
+![Mesh Viewer 11_26_2022 6_54_36 PM](https://user-images.githubusercontent.com/115185916/204100057-e7e91759-e70e-4775-a026-f31dfb0a7eb4.png)
+
+translate in the world frame and then rotate in in local frame:
+![Mesh Viewer 11_26_2022 6_51_18 PM](https://user-images.githubusercontent.com/115185916/204099909-971f827c-2292-4122-8b7e-9084fb844884.png)

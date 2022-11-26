@@ -26,3 +26,8 @@ local translate and then world rotate:
 
 translate in the world frame and then rotate in in local frame:
 ![Mesh Viewer 11_26_2022 6_51_18 PM](https://user-images.githubusercontent.com/115185916/204099909-971f827c-2292-4122-8b7e-9084fb844884.png)
+
+## Enable loading several models, switching between the active models and transforming each independently.
+![Mesh Viewer 11_26_2022 8_30_49 PM](https://user-images.githubusercontent.com/115185916/204103866-dc66611a-a6f9-44a2-a1a3-c61404a09139.png)
+![Mesh Viewer 11_26_2022 8_31_51 PM](https://user-images.githubusercontent.com/115185916/204103867-37106279-1065-4f83-9521-067c6ee7adb7.png)
+![Mesh Viewer 11_26_2022 8_30_20 PM](https://user-images.githubusercontent.com/115185916/204103868-2bf55582-fdd4-4b13-8281-830dca7fa5cc.png)

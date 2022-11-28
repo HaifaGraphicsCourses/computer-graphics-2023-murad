@@ -42,7 +42,7 @@ void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 	// TODO: Handle mouse scroll here
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
 	int windowWidth = 1280, windowHeight = 720;
 	GLFWwindow* window = SetupGlfwWindow(windowWidth, windowHeight, "Mesh Viewer");
@@ -55,19 +55,19 @@ int main(int argc, char **argv)
 
 	Renderer renderer = Renderer(frameBufferWidth, frameBufferHeight);
 	Scene scene = Scene();
-	
+
 	ImGuiIO& io = SetupDearImgui(window);
 	glfwSetScrollCallback(window, ScrollCallback);
-    while (!glfwWindowShouldClose(window))
-    {
-        glfwPollEvents();
+	while (!glfwWindowShouldClose(window))
+	{
+		glfwPollEvents();
 		StartFrame();
 		DrawImguiMenus(io, scene);
 		RenderFrame(window, scene, renderer, io);
-    }
+	}
 
 	Cleanup(window);
-    return 0;
+	return 0;
 }
 
 static void GlfwErrorCallback(int error, const char* description)
@@ -83,11 +83,11 @@ GLFWwindow* SetupGlfwWindow(int w, int h, const char* window_name)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	
-	#if __APPLE__
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	#endif
-	
+
+#if __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
 	GLFWwindow* window = glfwCreateWindow(w, h, window_name, NULL, NULL);
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1); // Enable vsync
@@ -122,7 +122,7 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 	int frameBufferWidth, frameBufferHeight;
 	glfwMakeContextCurrent(window);
 	glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
-	
+
 	if (frameBufferWidth != renderer.GetViewportWidth() || frameBufferHeight != renderer.GetViewportHeight())
 	{
 		// TODO: Set new aspect ratio
@@ -131,19 +131,65 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 	if (!io.WantCaptureKeyboard)
 	{
 		// TODO: Handle keyboard events here
-		if (io.KeysDown[65])
-		{
+
 			// A key is down
 			// Use the ASCII table for more key codes (https://www.asciitable.com/)
+
+		//ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).translatex, -680, 680);
+		//ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).translatey, -340, 340);
+		if (io.KeysDown[57])
+		{
+			//scene.GetModel(0).translatey += 1.01f;
+			//position.z -= 0.01f;
+			 &scene.GetModel(scene.GetActiveModelIndex()).translatex, -680, 680;
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			scene.GetModel(0).translatex += 0.01f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			scene.GetModel(0).translatex -= 0.01f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			scene.GetModel(0).translatey -= 0.01f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		{
+			scene.GetModel(0).localrotate() -= 0.01f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		{
+			scene.GetModel(0).localrotate() += 0.01f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+		{
+			scene.GetModel(0).rotate += 0.01f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+		{
+			scene.GetModel(0).rotate += 0.01f;;
 		}
 	}
+
 
 	if (!io.WantCaptureMouse)
 	{
 		// TODO: Handle mouse events here
 		if (io.MouseDown[0])
 		{
-			// Left mouse button is down
+			if (scene.GetModelCount() > 0)
+			{
+				&scene.GetModel(scene.GetActiveModelIndex()).Wtranslatex, -100, 100;
+			}
+		}
+		if (io.MouseDown[1])
+		{
+			if (scene.GetModelCount() > 0)
+			{
+				&scene.GetModel(scene.GetActiveModelIndex()).Wtranslatey, -599,599;
+			}
 		}
 	}
 
@@ -172,7 +218,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	 * MeshViewer menu
 	 */
 	ImGui::Begin("MeshViewer Menu");
-	
+
 	// Menu Bar
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -210,8 +256,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	/**
 	 * Imgui demo - you can remove it once you are familiar with imgui
 	 */
-	
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+
+	 // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -234,7 +280,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SameLine();
 		ImGui::Text("counter = %d", counter);
 
-		
+
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
@@ -248,7 +294,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::ListBox("models", &active, models, scene.GetModelCount());
 		scene.SetActiveModelIndex(active);
 	}
-	
+
 	{
 		static float f = 1.0f;
 		ImGui::Begin("Local transformations");
@@ -279,7 +325,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (scene.GetModelCount() > 0)
 			{
 				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
-				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).rotate, 0.0f, 360.0f );
+				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).rotate, 0.0f, 360.0f);
 			}
 		}
 		ImGui::End();

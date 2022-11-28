@@ -253,9 +253,9 @@ void Renderer::Render(const Scene& scene)
 	int half_height = viewport_height / 2;
 	// draw circle
 	auto count = scene.GetModelCount();
-	if (count > 0)
+	for(int j = 0; j < count; j++)
 	{
-		int active = scene.GetActiveModelIndex();
+		int active = j;
 		auto mesh = scene.GetModel(active);
 		auto faceCount = mesh.GetFacesCount();
 		for (int i = 0; i < faceCount; i++)

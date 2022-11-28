@@ -14,7 +14,7 @@ MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, s
 	normals(normals)
 {
 
-	for (int i = 0; i < faces.size(); i++)
+	/*for (int i = 0; i < faces.size(); i++)
 	{
 		auto face = GetFace(i);
 		cout << "face " << i << ": ";
@@ -25,7 +25,7 @@ MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, s
 		cout << face.GetVertexIndex(2) << ":(" << GetVertex(face.GetVertexIndex(2) - 1).x << ", " << GetVertex(face.GetVertexIndex(2) - 1).y << ", "
 			<< GetVertex(face.GetVertexIndex(2) - 1).z << ")" << endl;
 
-	}
+	}*/
 }
 
 MeshModel::~MeshModel()
@@ -55,7 +55,7 @@ const float MeshModel::getMax() const
 glm::mat4x4 MeshModel::scale()
 {
 	float max = getMax();
-	float s = 200.0 / max;
+	float s = 100.0 / max;
 	return glm::mat4x4(scalex * s,0, 0, 0, 0, scaley * s, 0, 0, 0, 0, s , 0, 0, 0, 0, 1);
 }
 

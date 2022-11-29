@@ -32,3 +32,7 @@ translate in the world frame and then rotate in in local frame:
 ![Mesh Viewer 11_29_2022 12_52_56 AM](https://user-images.githubusercontent.com/115185916/204398280-82243766-6466-49c2-ad4b-d760227e6175.png)
 ![Mesh Viewer 11_29_2022 12_54_59 AM](https://user-images.githubusercontent.com/115185916/204398284-e92b72d2-d412-462e-9dd2-fc8331c48b2f.png)
 ![Mesh Viewer 11_29_2022 12_55_13 AM](https://user-images.githubusercontent.com/115185916/204398288-65ebac95-835b-45b7-9ce3-631bd89d3c47.png)
+
+## implementing approaches for modifying the basic transformations using the keyboard and mouse.
+First function for transformations is that ,we can use the mouse clicks for local transormations in x ratio, we used the GetMouseDragDelta function that returns the delta from the initial clicking position while the mouse button is clicked or was just released.
+the second function is roatiting and translating the mesh by using the KeyBoard buttons, using the WASD buttons for local tranformation on x and y ratios, and the arrow keys for local rotation, the glfwGetKey function allowed us to know which keyboard button is pressed, the WS used for local translating on y ratio,the AD used for translating on x ratio, the left and right keys is used for local rotations.

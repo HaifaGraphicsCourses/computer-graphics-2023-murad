@@ -137,39 +137,29 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 
 		//ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).translatex, -680, 680);
 		//ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).translatey, -340, 340);
-		if (io.KeysDown[57])
+		if (io.KeysDown[262])
 		{
-			//scene.GetModel(0).translatey += 1.01f;
-			//position.z -= 0.01f;
-			 &scene.GetModel(scene.GetActiveModelIndex()).translatex, -680, 680;
+			 scene.GetModel(scene.GetActiveModelIndex()).rotate -= 1;
+		}
+		if (io.KeysDown[263])
+		{
+			scene.GetModel(scene.GetActiveModelIndex()).rotate += 1;
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatex += 0.01f;
+			scene.GetModel(0).translatex -= 1;
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatex -= 0.01f;
+			scene.GetModel(0).translatex += 1;
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatey -= 0.01f;
+			scene.GetModel(0).translatey -= 1;
 		}
-		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			scene.GetModel(0).localrotate() -= 0.01f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		{
-			scene.GetModel(0).localrotate() += 0.01f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-		{
-			scene.GetModel(0).rotate += 0.01f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
-		{
-			scene.GetModel(0).rotate += 0.01f;;
+			scene.GetModel(0).translatey += 1;
 		}
 	}
 
@@ -177,19 +167,10 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 	if (!io.WantCaptureMouse)
 	{
 		// TODO: Handle mouse events here
-		if (io.MouseDown[0])
+		if (scene.GetModelCount())
 		{
-			if (scene.GetModelCount() > 0)
-			{
-				&scene.GetModel(scene.GetActiveModelIndex()).Wtranslatex, -100, 100;
-			}
-		}
-		if (io.MouseDown[1])
-		{
-			if (scene.GetModelCount() > 0)
-			{
-				&scene.GetModel(scene.GetActiveModelIndex()).Wtranslatey, -599,599;
-			}
+			auto mouse = ImGui::GetMouseDragDelta();
+			scene.GetModel(scene.GetActiveModelIndex()).translatex += mouse.x / 50;
 		}
 	}
 
@@ -302,6 +283,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::RadioButton("scale", &e, 0); ImGui::SameLine();
 		ImGui::RadioButton("translate", &e, 1); ImGui::SameLine();
 		ImGui::RadioButton("rotate", &e, 2);
+		
 		if (e == 0)
 		{
 			if (scene.GetModelCount() > 0)
@@ -325,7 +307,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (scene.GetModelCount() > 0)
 			{
 				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
-				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).rotate, 0.0f, 360.0f);
+				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).rotate, -360.0f, 360.0f);
 			}
 		}
 		ImGui::End();
@@ -361,7 +343,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (scene.GetModelCount() > 0)
 			{
 				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
-				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).Wrotate, 0.0f, 360.0f);
+				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).Wrotate, -360.0f, 360.0f);
 			}
 		}
 		ImGui::End();

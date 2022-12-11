@@ -27,14 +27,15 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 glm::mat4& Camera::LookAt(const glm::vec3& eye, const glm::vec3& at, const glm::vec3& up)
 {
 	glm::vec3 z = glm::normalize(at - eye);
-	glm::vec4 z2 = glm::vec4(z, 1.0);
+	glm::vec4 z2 = glm::vec4(z, 0.0);
 	glm::vec3 x = glm::normalize(glm::cross(up,z));
-	glm::vec4 x2 = glm::vec4(x, 1.0);
+	glm::vec4 x2 = glm::vec4(x, 0.0);
 	glm::vec3 y = glm::normalize(glm::cross(z,x));
-	glm::vec4 y2 = glm::vec4(y, 1.0);
+	glm::vec4 y2 = glm::vec4(y, 0.0);
 	glm::vec4 t = glm::vec4(0.0, 0.0, 0.0, 1.0);
 	glm::mat4 c = glm::mat4(x2, y2, z2, t);
 	return c * glm::translate(-eye);
+	
 
 }
 

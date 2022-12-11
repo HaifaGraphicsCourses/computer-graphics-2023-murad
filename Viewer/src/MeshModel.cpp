@@ -56,7 +56,7 @@ glm::mat4x4 MeshModel::scale()
 {
 	float max = getMax();
 	float s = 100.0 / max;
-	return glm::mat4x4(scalex * s,0, 0, 0, 0, scaley * s, 0, 0, 0, 0, s , 0, 0, 0, 0, 1);
+	return glm::mat4x4(scalex,0, 0, 0, 0, scaley , 0, 0, 0, 0, s , 0, 0, 0, 0, 1);
 }
 
 
@@ -79,7 +79,7 @@ glm::mat4x4 MeshModel::Wscale()
 
 glm::mat4x4 MeshModel::Wtranslate()
 {
-	return glm::translate(glm::mat4(1.0f), glm::vec3(Wtranslatex + 640, Wtranslatey + 340, 0));
+	return glm::translate(glm::mat4(1.0f), glm::vec3(Wtranslatex , Wtranslatey, 0));
 }
 
 glm::mat4x4 MeshModel::Wlocalrotate()

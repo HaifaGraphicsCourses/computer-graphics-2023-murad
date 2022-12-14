@@ -145,27 +145,27 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 		//ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).translatey, -340, 340);
 		if (io.KeysDown[262])
 		{
-			 scene.GetModel(scene.GetActiveModelIndex()).rotate -= 10;
+			 scene.GetCamera(0).rotate -= 10;
 		}
 		if (io.KeysDown[263])
 		{
-			scene.GetModel(scene.GetActiveModelIndex()).rotate += 10;
+			scene.GetCamera(0).rotate += 10;
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatex -= 10;
+			scene.GetCamera(0).translatex -= 10;
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatex += 10;
+			scene.GetCamera(0).translatex += 10;
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatey -= 10;
+			scene.GetCamera(0).translatey -= 10;
 		}
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatey += 10;
+			scene.GetCamera(0).translatey += 10;
 		}
 	}
 
@@ -176,7 +176,8 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 		if (scene.GetModelCount())
 		{
 			auto mouse = ImGui::GetMouseDragDelta();
-			scene.GetModel(scene.GetActiveModelIndex()).translatex += mouse.x / 50;
+			scene.GetCamera(0).translatex += mouse.x / 50;
+			scene.GetCamera(0).translatey -= mouse.y / 50;
 		}
 	}
 
@@ -203,6 +204,8 @@ bool local = false;
 bool world = false;
 bool change = false;
 bool orthoProjectionControl = false;
+bool localcam = false;
+bool worldcam = false;
 
 void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 {
@@ -249,6 +252,10 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 		if (ImGui::BeginMenu("Camera"))
 		{
+			if (ImGui::MenuItem("local camera transformation"))
+				localcam = true;
+			if (ImGui::MenuItem("world camera transformation"))
+				worldcam = true;
 			if (ImGui::MenuItem("Ortho Projection"))
 				orthoProjectionControl = true;
 			ImGui::EndMenu();
@@ -313,7 +320,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	{
 		static float n = 0.01f;
 		static float f = 100.0f;
-		ImGui::Begin("Local transformations");
+		ImGui::Begin("orho projection control");
 		ImGui::SliderFloat("left", &scene.GetCamera(0).left, -windowWidth*4, windowWidth*2);
 		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
 		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
@@ -325,9 +332,36 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::End();
 	}
 
+	if (localcam)
+	{
+		ImGui::Begin("Local camera transformations");
+		static float f = 1.0f;
+		ImGui::SliderFloat("X", &scene.GetCamera(0).translatex, -680, 680);
+		ImGui::SliderFloat("Y", &scene.GetCamera(0).translatey, -340, 340);
+		ImGui::SliderFloat("Z", &f, -340, 340);
+		ImGui::SliderFloat("rotate", &scene.GetCamera(0).rotate, -360.0f, 360.0f);
+		if (ImGui::Button("Close Me"))
+			localcam = false;
+		ImGui::End();
+	}
+
+	if (worldcam)
+	{
+		ImGui::Begin("Lworld camera transformations");
+		static float f = 1.0f;
+		ImGui::SliderFloat("X", &scene.GetCamera(0).Wtranslatex, -680, 680);
+		ImGui::SliderFloat("Y", &scene.GetCamera(0).Wtranslatey, -340, 340);
+		ImGui::SliderFloat("Z", &f, -340, 340);
+		ImGui::SliderFloat("rotate", &scene.GetCamera(0).Wrotate, -360.0f, 360.0f);
+		if (ImGui::Button("Close Me"))
+			worldcam = false;
+		ImGui::End();
+	}
+
 	if(local == 1)
 	{
 		static float f = 1.0f;
+
 		ImGui::Begin("Local transformations");
 		static int e = 0;
 		ImGui::RadioButton("scale", &e, 0); ImGui::SameLine();
@@ -400,7 +434,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			}
 		}
 		if (ImGui::Button("Close Me"))
-			local = false;
+			world = false;
 		ImGui::End();
 	}
 

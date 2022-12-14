@@ -9,6 +9,11 @@
 #include "Scene.h"
 #include <glm/gtx/transform.hpp>
 #include <glm/glm.hpp>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <cmath>
+
+
 
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -39,5 +44,14 @@ const glm::mat4x4& Camera::GetProjectionTransformation() const
 
 const glm::mat4x4& Camera::GetViewTransformation() const
 {
-	return view;
+	glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(translatex, translatey, 0));
+	float o = -rotate * M_PI / 180;
+	glm::mat4x4 rotate(cos(o), -sin(o), 0, 0, sin(o), cos(o), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+
+	glm::mat4 wtranslate = glm::translate(glm::mat4(1.0f), glm::vec3(Wtranslatex, Wtranslatey, 0));
+	float w = -Wrotate * M_PI / 180;
+	glm::mat4x4 wrotate(cos(w), -sin(w), 0, 0, sin(w), cos(w), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+
+	return glm::inverse(wtranslate * wrotate * translate * rotate);
 }
+

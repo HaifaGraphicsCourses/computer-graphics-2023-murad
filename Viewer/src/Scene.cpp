@@ -6,7 +6,6 @@ Scene::Scene() :
 	active_camera_index(0),
 	active_model_index(0)
 {
-
 }
 
 void Scene::AddModel(const std::shared_ptr<MeshModel>& mesh_model)
@@ -39,7 +38,7 @@ int Scene::GetCameraCount() const
 	return cameras.size();
 }
 
-Camera& Scene::GetCamera(int index)
+Camera& Scene::GetCamera(int index) const
 {
 	return *cameras[index];
 }

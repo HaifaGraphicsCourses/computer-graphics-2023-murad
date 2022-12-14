@@ -13,9 +13,10 @@ public:
 	void ClearColorBuffer(const glm::vec3& color);
 	int GetViewportWidth() const;
 	int GetViewportHeight() const;
-	void Translate(const Scene& scene) const;
-	void Scale(const Scene& scene) const;
-	
+
+	int viewport_width;
+	int viewport_height;
+
 private:
 	void PutPixel(const int i, const int j, const glm::vec3& color);
 	void DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color);
@@ -25,8 +26,7 @@ private:
 	void InitOpenglRendering();
 
 	float* color_buffer;
-	int viewport_width;
-	int viewport_height;
+	
 	GLuint gl_screen_tex;
 	GLuint gl_screen_vtc;
 };

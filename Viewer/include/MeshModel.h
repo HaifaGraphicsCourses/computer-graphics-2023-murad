@@ -13,6 +13,7 @@ public:
 	const std::string& GetModelName() const;
 	const glm::vec4 GetVertex(int index) const;
 	const float getMax() const;
+	const float getMin() const;
 	glm::mat4x4 scale();
 	glm::mat4x4 translate();
 	glm::mat4x4 localrotate();

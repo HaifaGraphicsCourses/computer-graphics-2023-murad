@@ -253,27 +253,86 @@ void Renderer::Render(const Scene& scene)
 	int half_height = viewport_height / 2;
 	// draw circle
 	auto count = scene.GetModelCount();
+	auto proj = scene.GetCamera(0).GetProjectionTransformation();
+	auto view = scene.GetCamera(0).GetViewTransformation();
+
 	for(int j = 0; j < count; j++)
 	{
 		int active = j;
 		auto mesh = scene.GetModel(active);
 		auto faceCount = mesh.GetFacesCount();
+
+		glm::mat4 modelMatrix = mesh.translate() * mesh.localrotate() * mesh.scale();
+		glm::mat4 worldMatrix = mesh.Wtranslate() * mesh.Wlocalrotate() * mesh.Wscale();
+		/*float maxX = 0; float minX = 1000;
+		float maxY = 0; float minY = 1000;
+
+		float lmaxX = -100; float lminX = 1000;
+		float lmaxY = -100; float lminY = 1000;
+
+		glm::vec4 maxmax;
+		glm::vec4 minmax;
+		glm::vec4 maxmin;
+		glm::vec4 minmin;*/
+		
 		for (int i = 0; i < faceCount; i++)
 		{
 			auto face = mesh.GetFace(i);
 			auto v1 =  mesh.GetVertex((face.GetVertexIndex(0) - 1));
 			auto v2 =  mesh.GetVertex((face.GetVertexIndex(1) - 1));
 			auto v3 =  mesh.GetVertex((face.GetVertexIndex(2) - 1));
-			v1 =  mesh.translate() * mesh.localrotate() * mesh.scale() * v1;
-			v2 =  mesh.translate() * mesh.localrotate() * mesh.scale() * v2;
-			v3 =  mesh.translate() * mesh.localrotate() * mesh.scale() * v3;
-			v1 = mesh.Wtranslate() * mesh.Wlocalrotate() * mesh.Wscale() * v1;
-			v2 = mesh.Wtranslate() * mesh.Wlocalrotate() * mesh.Wscale() * v2;
-			v3 = mesh.Wtranslate() * mesh.Wlocalrotate() * mesh.Wscale() * v3;
+
+			/*lmaxX = max(lmaxX, v1.x); lmaxX = max(lmaxX, v2.x); lmaxX = max(lmaxX, v3.x);
+			lminX = min(lminX, v1.x); lminX = min(lminX, v1.x); lminX = min(lminX, v1.x);
+			lmaxY = max(lmaxY, v1.y); lmaxY = max(lmaxY, v2.y); lmaxY = max(lmaxY, v3.y);
+			lminY = min(lminY, v1.y); lminY = min(lminY, v1.y); lminY = min(lminY, v1.y);*/
+			
+			v1 = proj * worldMatrix * modelMatrix * v1;
+			v2 = proj * worldMatrix * modelMatrix * v2;
+			v3 = proj * worldMatrix * modelMatrix * v3;
+
+			cout << glm::to_string(view) << endl;
+			/*cout << glm::to_string(v2) << endl;
+			cout << glm::to_string(v3) << endl;*/
+			
+			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
+			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
+			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
+
+			/*maxX = max(maxX, v1.x); maxX = max(maxX, v2.x); maxX = max(maxX, v3.x);
+			minX = min(minX, v1.x); minX = min(minX, v1.x); minX = min(minX, v1.x);
+			maxY = max(maxY, v1.y); maxY = max(maxY, v2.y); maxY = max(maxY, v3.y);
+			minY = min(minY, v1.y); minY = min(minY, v1.y); minY = min(minY, v1.y);
+
+			maxmax = glm::vec4(lmaxX, lmaxY, 0, 0);
+			minmax = glm::vec4(lminX, lmaxY, 0, 0);
+			maxmin = glm::vec4(lmaxX, lminY, 0, 0);
+			minmin = glm::vec4(lminX, lminY, 0, 0);
+
+		    maxmax = proj * worldMatrix * modelMatrix * maxmax;
+			minmax = proj * worldMatrix * modelMatrix * minmax;
+			maxmin = proj * worldMatrix * modelMatrix * maxmin;
+			minmin = proj * worldMatrix * modelMatrix * minmin;
+
+			maxmax.x = (maxmax.x + 1) * half_width; maxmax.y = (maxmax.y + 1) * half_height;
+			minmax.x = (minmax.x + 1) * half_width; minmax.y = (minmax.y + 1) * half_height;
+			maxmin.x = (maxmin.x + 1) * half_width; maxmin.y = (maxmin.y + 1) * half_height;
+			minmin.x = (minmin.x + 1) * half_width; minmin.y = (minmin.y + 1) * half_height;*/
+
+
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v2.x, v2.y),glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v2.x, v2.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
 		}
+		/*DrawLine(glm::vec2(minmax.x, minmax.y), glm::vec2(maxmax.x, maxmax.y), glm::vec3(0, 1, 1));
+		DrawLine(glm::vec2(minmax.x, minmax.y), glm::vec2(minmin.x, minmin.y), glm::vec3(0, 1, 1));
+		DrawLine(glm::vec2(maxmax.x, maxmax.y), glm::vec2(maxmin.x, maxmin.y), glm::vec3(0, 1, 1));
+		DrawLine(glm::vec2(minmin.x, minmin.y), glm::vec2(maxmin.x, maxmin.y), glm::vec3(0, 1, 1));
+
+		DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), glm::vec3(0, 1, 1));
+		DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), glm::vec3(0, 1, 1));
+		DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), glm::vec3(0, 1, 1));
+		DrawLine(glm::vec2(minX, minY), glm::vec2(maxX, minY), glm::vec3(0, 1, 1));*/
 	}
 }
 

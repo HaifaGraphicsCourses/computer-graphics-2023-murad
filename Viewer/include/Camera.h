@@ -11,7 +11,13 @@ public:
 
 	const glm::mat4x4& GetProjectionTransformation() const;
 	const glm::mat4x4& GetViewTransformation() const;
+	glm::mat4& projection();
 	glm::mat4& LookAt(const glm::vec3& eye, const glm::vec3& at, const glm::vec3& up);
+
+	float left;
+	float right;
+	float up;
+	float down;
 
 private:
 	glm::mat4x4 view_transformation;

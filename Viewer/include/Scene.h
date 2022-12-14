@@ -19,7 +19,7 @@ public:
 	
 	void AddCamera(const shared_ptr<Camera>& camera);
 	int GetCameraCount() const;
-	Camera& GetCamera(int index);
+	Camera& GetCamera(int index) const;
 	Camera& GetActiveCamera();
 
 	void SetActiveCameraIndex(int index);
@@ -27,6 +27,7 @@ public:
 
 	void SetActiveModelIndex(int index);
 	int GetActiveModelIndex() const;
+
 	
 private:
 	vector<shared_ptr<MeshModel>> mesh_models;

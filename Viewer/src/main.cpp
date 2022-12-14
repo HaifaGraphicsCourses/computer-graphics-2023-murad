@@ -42,9 +42,10 @@ void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 	// TODO: Handle mouse scroll here
 }
 
+int windowWidth = 1280, windowHeight = 720;
 int main(int argc, char** argv)
 {
-	int windowWidth = 1280, windowHeight = 720;
+	//int windowWidth = 1280, windowHeight = 720;
 	GLFWwindow* window = SetupGlfwWindow(windowWidth, windowHeight, "Mesh Viewer");
 	if (!window)
 		return 1;
@@ -55,6 +56,11 @@ int main(int argc, char** argv)
 
 	Renderer renderer = Renderer(frameBufferWidth, frameBufferHeight);
 	Scene scene = Scene();
+	scene.AddCamera(std::make_shared<Camera>());
+	scene.GetCamera(0).left = -windowWidth;
+	scene.GetCamera(0).right = windowWidth;
+	scene.GetCamera(0).down = -windowHeight;
+	scene.GetCamera(0).up = windowHeight;
 
 	ImGuiIO& io = SetupDearImgui(window);
 	glfwSetScrollCallback(window, ScrollCallback);
@@ -139,27 +145,27 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 		//ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).translatey, -340, 340);
 		if (io.KeysDown[262])
 		{
-			 scene.GetModel(scene.GetActiveModelIndex()).rotate -= 1;
+			 scene.GetModel(scene.GetActiveModelIndex()).rotate -= 10;
 		}
 		if (io.KeysDown[263])
 		{
-			scene.GetModel(scene.GetActiveModelIndex()).rotate += 1;
+			scene.GetModel(scene.GetActiveModelIndex()).rotate += 10;
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatex -= 1;
+			scene.GetModel(0).translatex -= 10;
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatex += 1;
+			scene.GetModel(0).translatex += 10;
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatey -= 1;
+			scene.GetModel(0).translatey -= 10;
 		}
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			scene.GetModel(0).translatey += 1;
+			scene.GetModel(0).translatey += 10;
 		}
 	}
 
@@ -193,12 +199,17 @@ void Cleanup(GLFWwindow* window)
 	glfwTerminate();
 }
 
+bool local = false;
+bool world = false;
+bool change = false;
+bool orthoProjectionControl = false;
+
 void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 {
 	/**
 	 * MeshViewer menu
 	 */
-	ImGui::Begin("MeshViewer Menu");
+	//ImGui::Begin("MeshViewer Menu");
 
 	// Menu Bar
 	if (ImGui::BeginMainMenuBar())
@@ -225,14 +236,32 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Mesh"))
+		{
+			if (ImGui::MenuItem("Local transformations"))
+				local = true;
+			if (ImGui::MenuItem("World transformations"))
+				world = true;
+			if (ImGui::MenuItem("select model"))
+				change = true;
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Camera"))
+		{
+			if (ImGui::MenuItem("Ortho Projection"))
+				orthoProjectionControl = true;
+			ImGui::EndMenu();
+		}
+
 		// TODO: Add more menubar items (if you want to)
 		ImGui::EndMainMenuBar();
 	}
 
 	// Controls
-	ImGui::ColorEdit3("Clear Color", (float*)&clear_color);
+	//ImGui::ColorEdit3("Clear Color", (float*)&clear_color);
 	// TODO: Add more controls as needed
-	ImGui::End();
+	//ImGui::End();
 
 	/**
 	 * Imgui demo - you can remove it once you are familiar with imgui
@@ -243,30 +272,31 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-	{
-		static float f = 0.0f;
-		static int counter = 0;
+	//{
+	//	static float f = 0.0f;
+	//	static int counter = 0;
 
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+	//	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-		ImGui::Checkbox("Another Window", &show_another_window);
+	//	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+	//	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+	//	ImGui::Checkbox("Another Window", &show_another_window);
 
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+	//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	//	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
+	//	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+	//		counter++;
+	//	ImGui::SameLine();
+	//	ImGui::Text("counter = %d", counter);
 
 
 
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
-	}
+	//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	//	ImGui::End();
+	//}
 
+	if(change == 1)
 	{
 		static int active = 0;
 		static const char* models[] = { "model 1","model 2", "model 3", "model 4", "model 5", "model 6", "model 7",
@@ -274,8 +304,28 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::Begin("Active model");
 		ImGui::ListBox("models", &active, models, scene.GetModelCount());
 		scene.SetActiveModelIndex(active);
+		if (ImGui::Button("Close Me"))
+			change = false;
+		ImGui::End();
 	}
 
+	if (orthoProjectionControl == 1)
+	{
+		static float n = 0.01f;
+		static float f = 100.0f;
+		ImGui::Begin("Local transformations");
+		ImGui::SliderFloat("left", &scene.GetCamera(0).left, -windowWidth*4, windowWidth*2);
+		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
+		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
+		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
+		ImGui::SliderFloat("near", &n, 0, 100);
+		ImGui::SliderFloat("far", &f, 0, 200);
+		if (ImGui::Button("Close Me"))
+			local = false;
+		ImGui::End();
+	}
+
+	if(local == 1)
 	{
 		static float f = 1.0f;
 		ImGui::Begin("Local transformations");
@@ -310,9 +360,12 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).rotate, -360.0f, 360.0f);
 			}
 		}
+		if (ImGui::Button("Close Me"))
+			local = false;
 		ImGui::End();
 	}
 
+	if(world)
 	{
 		static float f = 1.0f;
 		ImGui::Begin("World transformations");
@@ -346,6 +399,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).Wrotate, -360.0f, 360.0f);
 			}
 		}
+		if (ImGui::Button("Close Me"))
+			local = false;
 		ImGui::End();
 	}
 

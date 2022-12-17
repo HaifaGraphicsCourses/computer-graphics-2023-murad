@@ -40,3 +40,9 @@ first picture is translating in world frame and rotating in local frame which mo
 
 
 
+## Implement and display the bounding box of the object, in local and world coordinates. Demonstrate the differences between them.
+
+a bounding box in local coordinates moves exactly like the model especially the rotation and never changes shape while the bounding box in world coordinates when rotating changes to the new max and min coordinates
+
+https://user-images.githubusercontent.com/115185916/208265622-f7b58484-2c61-4a15-ade5-2a45af99e0df.mp4
+

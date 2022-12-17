@@ -247,7 +247,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				world = true;
 			if (ImGui::MenuItem("select model"))
 				change = true;
-			ImGui::Checkbox("BoundingBox", &scene.bounding);
+			ImGui::Checkbox("Bounding Box", &scene.bounding);
 			ImGui::Checkbox("Show axis", &scene.axis);
 			ImGui::EndMenu();
 		}

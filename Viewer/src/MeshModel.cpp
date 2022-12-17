@@ -89,7 +89,7 @@ const glm::mat4 MeshModel::GetTransformation() const
 	glm::mat4x4 scale(scalex, 0, 0, 0, 0, scaley, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(translatex, translatey, 0));
 	float o = -rotate * M_PI / 180;
-	glm::mat4x4 rotate(cos(o), -sin(o), 0, 0, sin(o), cos(o), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+	glm::mat4x4 rotate = glm::mat4(cos(o), -sin(o), 0, 0, sin(o), cos(o), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
 	return (translate * rotate * scale);
 }

@@ -31,9 +31,12 @@ note: red axis are world axis and blue axis are model axis
 ![Mesh Viewer 12_17_2022 7_53_58 PM](https://user-images.githubusercontent.com/115185916/208255037-ca588dc6-a06a-47d4-ad24-27a884c9bd78.png)
 ![Mesh Viewer 12_17_2022 7_54_33 PM](https://user-images.githubusercontent.com/115185916/208255038-c245e1a3-4472-4bfe-a701-3b580613a285.png)
 ![Mesh Viewer 12_17_2022 7_54_49 PM](https://user-images.githubusercontent.com/115185916/208255039-21402a94-40ee-45da-bfb9-3becf55eebb7.png)
-![Mesh Viewer 12_17_2022 7_55_01 PM](https://user-images.githubusercontent.com/115185916/208255040-2021496b-f4ea-47c3-8a97-64685109787c.png)
-![Mesh Viewer 12_17_2022 7_52_27 PM](https://user-images.githubusercontent.com/115185916/208255041-1a2fc7db-e5ab-4d7a-b77c-7c0a13014dc6.png)
 
+## Load a different mesh and pick two non-commuting transformations T1, T2. Compare the results of applying T1 in model frame and T2 in world frame vs .T1 in world frame and T2 in world frame.
+
+first picture is translating in world frame and rotating in local frame which moves the axis of the model and then rotating the model in the local frame keeps the axis as they were but rotates the model. the second picture is rotating the model in the world frame which also rotates the axis and then translating the model in the local frame moves it along its axis which are rotated.
+![Mesh Viewer 12_17_2022 9_25_51 PM](https://user-images.githubusercontent.com/115185916/208263050-45014ca4-457a-4a76-a79c-3947d76a578f.png)
+![Mesh Viewer 12_17_2022 9_24_30 PM](https://user-images.githubusercontent.com/115185916/208263051-78007fbb-1d1d-4a39-9834-6333368b7dec.png)
 
 
 

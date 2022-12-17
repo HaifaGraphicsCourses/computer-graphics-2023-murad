@@ -28,6 +28,9 @@ public:
 	void SetActiveModelIndex(int index);
 	int GetActiveModelIndex() const;
 
+	bool bounding = false;
+	bool axis = false;
+
 	
 private:
 	vector<shared_ptr<MeshModel>> mesh_models;

@@ -12,6 +12,7 @@ public:
 	int GetFacesCount() const;
 	const std::string& GetModelName() const;
 	const glm::mat4 GetTransformation() const;
+	const glm::mat4 GetWorld() const;
 	const glm::vec4 GetVertex(int index) const;
 	const float getMax() const;
 	const float getMin() const;

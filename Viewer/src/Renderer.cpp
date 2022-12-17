@@ -256,6 +256,24 @@ void Renderer::Render(const Scene& scene)
 	auto proj = scene.GetCamera(0).GetProjectionTransformation();
 	auto view = scene.GetCamera(0).GetViewTransformation();
 
+	glm::vec4 xm(viewport_width, 0, 1, 1);
+	glm::vec4 x(-viewport_width, 0, 1, 1);
+	glm::vec4 ym(0, viewport_height, 1, 1);
+	glm::vec4 y(0, -viewport_height, 1, 1);
+
+	xm = proj * view * xm;
+	x = proj * view * x;
+	ym = proj * view * ym;
+	y = proj * view * y;
+
+	xm.x = (xm.x + 1) * half_width; xm.y = (xm.y + 1) * half_height;
+	x.x = (x.x + 1) * half_width; x.y = (x.y + 1) * half_height;
+	ym.x = (ym.x + 1) * half_width; ym.y = (ym.y + 1) * half_height;
+	y.x = (y.x + 1) * half_width; y.y = (y.y + 1) * half_height;
+
+	DrawLine(glm::vec2(xm.x, xm.y), glm::vec2(x.x, x.y), glm::vec3(1, 0, 0));
+	DrawLine(glm::vec2(ym.x, ym.y), glm::vec2(y.x, y.y), glm::vec3(1, 0, 0));
+
 	for(int active = 0; active < count; active++)
 	{
 		auto mesh = scene.GetModel(active);
@@ -263,6 +281,7 @@ void Renderer::Render(const Scene& scene)
 		mesh.screen = viewport_height;
 
 		glm::mat4 modelMatrix = mesh.GetTransformation();
+		glm::mat4 world = mesh.GetWorld();
 		
 		for (int i = 0; i < faceCount; i++)
 		{
@@ -271,9 +290,9 @@ void Renderer::Render(const Scene& scene)
 			auto v2 =  mesh.GetVertex((face.GetVertexIndex(1) - 1));
 			auto v3 =  mesh.GetVertex((face.GetVertexIndex(2) - 1));
 			
-			v1 = proj * view * modelMatrix * v1;
-			v2 = proj * view * modelMatrix * v2;
-			v3 = proj * view * modelMatrix * v3;
+			v1 = proj * view * world * modelMatrix * v1;
+			v2 = proj * view * world * modelMatrix * v2;
+			v3 = proj * view * world * modelMatrix * v3;
 
 			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
 			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
@@ -283,6 +302,22 @@ void Renderer::Render(const Scene& scene)
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v2.x, v2.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
 		}
+		glm::vec4 xm(viewport_width, 0, 1, 1);
+		glm::vec4 x(-viewport_width, 0, 1, 1);
+		glm::vec4 ym(0, viewport_height, 1, 1);
+		glm::vec4 y(0, -viewport_height, 1, 1);
+		xm = proj * view * world * xm;
+		x = proj * view * world * x;
+		ym = proj * view * world * ym;
+		y = proj * view * world * y;
+		xm.x = (xm.x + 1) * half_width; xm.y = (xm.y + 1) * half_height;
+		x.x = (x.x + 1) * half_width; x.y = (x.y + 1) * half_height;
+		ym.x = (ym.x + 1) * half_width; ym.y = (ym.y + 1) * half_height;
+		y.x = (y.x + 1) * half_width; y.y = (y.y + 1) * half_height;
+		cout << glm::to_string(xm) << endl;
+		cout << glm::to_string(x) << endl;
+		DrawLine(glm::vec2(xm.x, xm.y), glm::vec2(x.x, x.y), glm::vec3(0, 0, 1));
+		DrawLine(glm::vec2(ym.x, ym.y), glm::vec2(y.x, y.y), glm::vec3(0, 0, 1));
 
 	}
 }

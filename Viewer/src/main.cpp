@@ -328,7 +328,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SliderFloat("near", &n, 0, 100);
 		ImGui::SliderFloat("far", &f, 0, 200);
 		if (ImGui::Button("Close Me"))
-			local = false;
+			orthoProjectionControl = false;
 		ImGui::End();
 	}
 

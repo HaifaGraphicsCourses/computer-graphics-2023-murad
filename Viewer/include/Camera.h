@@ -12,10 +12,10 @@ public:
 	const glm::mat4x4& GetProjectionTransformation() const;
 	const glm::mat4x4& GetViewTransformation() const;
 
-	float left;
-	float right;
-	float up;
-	float down;
+	float left = -1280.0f;
+	float right = 1280.0f;
+	float up = 720.0f;
+	float down = -720.0f;
 
 	float translatex = 0.0f;
 	float translatey = 0.0f;

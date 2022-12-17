@@ -91,10 +91,15 @@ const glm::mat4 MeshModel::GetTransformation() const
 	float o = -rotate * M_PI / 180;
 	glm::mat4x4 rotate(cos(o), -sin(o), 0, 0, sin(o), cos(o), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
+	return (translate * rotate * scale);
+}
+
+const glm::mat4 MeshModel::GetWorld() const
+{
 	glm::mat4x4 wscale(Wscalex, 0, 0, 0, 0, Wscaley, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-    glm::mat4 wtranslate = glm::translate(glm::mat4(1.0f), glm::vec3(Wtranslatex, Wtranslatey, 0));
+	glm::mat4 wtranslate = glm::translate(glm::mat4(1.0f), glm::vec3(Wtranslatex, Wtranslatey, 0));
 	float w = -Wrotate * M_PI / 180;
 	glm::mat4x4 wrotate(cos(w), -sin(w), 0, 0, sin(w), cos(w), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
-	return (wtranslate * wrotate * wscale * translate * rotate * scale);
+	return (wtranslate * wrotate * wscale);
 }

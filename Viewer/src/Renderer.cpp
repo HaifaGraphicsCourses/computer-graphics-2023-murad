@@ -348,14 +348,14 @@ void Renderer::Render(const Scene& scene)
 
 		if (scene.bounding)
 		{
-			DrawLine(glm::vec2(minmax.x, minmax.y), glm::vec2(maxmax.x, maxmax.y), glm::vec3(0, 1, 1));
-			DrawLine(glm::vec2(minmax.x, minmax.y), glm::vec2(minmin.x, minmin.y), glm::vec3(0, 1, 1));
-			DrawLine(glm::vec2(maxmax.x, maxmax.y), glm::vec2(maxmin.x, maxmin.y), glm::vec3(0, 1, 1));
-			DrawLine(glm::vec2(minmin.x, minmin.y), glm::vec2(maxmin.x, maxmin.y), glm::vec3(0, 1, 1));
-			DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), glm::vec3(0, 1, 1));
-			DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), glm::vec3(0, 1, 1));
-			DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), glm::vec3(0, 1, 1));
-			DrawLine(glm::vec2(minX, minY), glm::vec2(maxX, minY), glm::vec3(0, 1, 1));
+			DrawLine(glm::vec2(minmax.x, minmax.y), glm::vec2(maxmax.x, maxmax.y), glm::vec3(0, 1, 0));
+			DrawLine(glm::vec2(minmax.x, minmax.y), glm::vec2(minmin.x, minmin.y), glm::vec3(0, 1, 0));
+			DrawLine(glm::vec2(maxmax.x, maxmax.y), glm::vec2(maxmin.x, maxmin.y), glm::vec3(0, 1, 0));
+			DrawLine(glm::vec2(minmin.x, minmin.y), glm::vec2(maxmin.x, maxmin.y), glm::vec3(0, 1, 0));
+			DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), glm::vec3(1, 0, 0));
+			DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), glm::vec3(1, 0, 0));
+			DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), glm::vec3(1, 0, 0));
+			DrawLine(glm::vec2(minX, minY), glm::vec2(maxX, minY), glm::vec3(1, 0, 0));
 		}
 
 		if (scene.axis)

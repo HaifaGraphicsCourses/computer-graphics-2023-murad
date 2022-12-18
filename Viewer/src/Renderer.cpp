@@ -308,6 +308,21 @@ void Renderer::Render(const Scene& scene)
 			auto n2 = mesh.getNormal((face.GetNormalIndex(1) - 1));
 			auto n3 = mesh.getNormal((face.GetNormalIndex(2) - 1));
 
+			glm::vec3 fn1(v1.x, v1.y, v1.z);
+			glm::vec3 fn2(v2.x, v2.y, v2.z);
+			glm::vec3 fn3(v3.x, v3.y, v3.z);
+
+			glm::vec3 tempnormal = glm::cross(fn2 - fn1, fn3 - fn1);
+			tempnormal = glm::normalize(tempnormal);
+
+			glm::vec3 center(0.0f);
+			center += fn1 + fn2 + fn3;
+			center /= 3;
+
+			glm::vec4 centered(center, 1.0f);
+			glm::vec4 facenormal = centered + glm::vec4(tempnormal,0.0f);
+
+
 			auto normal1 = v1 + n1;
 			auto normal2 = v2 + n2;
 			auto normal3 = v3 + n3;
@@ -331,6 +346,11 @@ void Renderer::Render(const Scene& scene)
 			normal3.x *=  s;
 			normal3.y *=  s; 
 
+			centered.x *= s;
+			centered.y *= s;
+			facenormal.x *= s;
+			facenormal.y *= s;
+
 				
 
 			if (scene.bounding)
@@ -349,6 +369,9 @@ void Renderer::Render(const Scene& scene)
 			normal2 = proj * view * world * modelMatrix * normal2;
 			normal3 = proj * view * world * modelMatrix * normal3;
 
+			centered = proj * view * world * modelMatrix * centered;
+			facenormal = proj * view * world * modelMatrix * facenormal;
+
 			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
 			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
 			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
@@ -357,7 +380,8 @@ void Renderer::Render(const Scene& scene)
 			normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
 			normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
 
-			cout << glm::to_string(normal1) << endl;
+			centered.x = (centered.x + 1) * half_width; centered.y = (centered.y + 1) * half_height;
+			facenormal.x = (facenormal.x + 1) * half_width; facenormal.y = (facenormal.y + 1) * half_height;
 
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v2.x, v2.y),glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
@@ -366,6 +390,8 @@ void Renderer::Render(const Scene& scene)
 			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(normal1.x, normal1.y), glm::vec3(1, 0, 0));
 			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(normal2.x, normal2.y), glm::vec3(1, 0, 0));
 			DrawLine(glm::vec2(v3.x, v3.y), glm::vec2(normal3.x, normal3.y), glm::vec3(1, 0, 0));
+
+			DrawLine(glm::vec2(centered.x, centered.y), glm::vec2(facenormal.x, facenormal.y), glm::vec3(1, 0, 0));
 
 			if (scene.bounding)
 			{

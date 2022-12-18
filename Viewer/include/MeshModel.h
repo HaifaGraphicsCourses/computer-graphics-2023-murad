@@ -16,6 +16,8 @@ public:
 	const glm::vec4 GetVertex(int index) const;
 	const float getMax() const;
 	const float getMin() const;
+	const glm::vec4 getNormal(int i) const;
+	const float getMaxNormal() const;
 	
 	float scalex = 1.0f;
 	float scaley = 1.0f;

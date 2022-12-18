@@ -289,8 +289,8 @@ void Renderer::Render(const Scene& scene)
 
 			float maxX = 0; float minX = 1000;
 			float maxY = 0; float minY = 1000;
-			float lmaxX = -100; float lminX = 1000;
-			float lmaxY = -100; float lminY = 1000;
+			float lmaxX = -1000; float lminX = 1000;
+			float lmaxY = -1000; float lminY = 1000;
 			glm::vec4 maxmax;
 			glm::vec4 minmax;
 			glm::vec4 maxmin;
@@ -304,6 +304,35 @@ void Renderer::Render(const Scene& scene)
 			auto v2 =  mesh.GetVertex((face.GetVertexIndex(1) - 1));
 			auto v3 =  mesh.GetVertex((face.GetVertexIndex(2) - 1));
 
+			auto n1 = mesh.getNormal((face.GetNormalIndex(0) - 1));
+			auto n2 = mesh.getNormal((face.GetNormalIndex(1) - 1));
+			auto n3 = mesh.getNormal((face.GetNormalIndex(2) - 1));
+
+			auto normal1 = v1 + n1;
+			auto normal2 = v2 + n2;
+			auto normal3 = v3 + n3;
+
+			float maxv = mesh.getMax();
+			float s = half_height / maxv;
+			v1.x *= s;
+			v1.y *= s;
+			v1.z *= s;
+			v2.x *= s;
+			v2.y *= s;
+			v2.z *= s;
+			v3.x *= s;
+			v3.y *= s;
+			v3.z *= s;
+
+			normal1.x *=  s;
+			normal1.y *=  s;
+			normal2.x *=  s;
+			normal2.y *=  s;
+			normal3.x *=  s;
+			normal3.y *=  s; 
+
+				
+
 			if (scene.bounding)
 			{
 				lmaxX = max(lmaxX, v1.x); lmaxX = max(lmaxX, v2.x); lmaxX = max(lmaxX, v3.x);
@@ -316,20 +345,34 @@ void Renderer::Render(const Scene& scene)
 			v2 = proj * view * world * modelMatrix * v2;
 			v3 = proj * view * world * modelMatrix * v3;
 
+			normal1 = proj * view * world * modelMatrix * normal1;
+			normal2 = proj * view * world * modelMatrix * normal2;
+			normal3 = proj * view * world * modelMatrix * normal3;
+
 			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
 			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
 			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
+
+			normal1.x = (normal1.x + 1) * half_width; normal1.y = (normal1.y + 1) * half_height;
+			normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
+			normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
+
+			cout << glm::to_string(normal1) << endl;
 
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v2.x, v2.y),glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v2.x, v2.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
 
+			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(normal1.x, normal1.y), glm::vec3(1, 0, 0));
+			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(normal2.x, normal2.y), glm::vec3(1, 0, 0));
+			DrawLine(glm::vec2(v3.x, v3.y), glm::vec2(normal3.x, normal3.y), glm::vec3(1, 0, 0));
+
 			if (scene.bounding)
 			{
 				maxX = max(maxX, v1.x); maxX = max(maxX, v2.x); maxX = max(maxX, v3.x);
-				minX = min(minX, v1.x); minX = min(minX, v1.x); minX = min(minX, v1.x);
+				minX = min(minX, v1.x); minX = min(minX, v2.x); minX = min(minX, v3.x);
 				maxY = max(maxY, v1.y); maxY = max(maxY, v2.y); maxY = max(maxY, v3.y);
-				minY = min(minY, v1.y); minY = min(minY, v1.y); minY = min(minY, v1.y);
+				minY = min(minY, v1.y); minY = min(minY, v3.y); minY = min(minY, v3.y);
 				maxmax = glm::vec4(lmaxX, lmaxY, 0, 1);
 				minmax = glm::vec4(lminX, lmaxY, 0, 1);
 				maxmin = glm::vec4(lmaxX, lminY, 0, 1);

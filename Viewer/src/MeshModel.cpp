@@ -37,16 +37,7 @@ const Face& MeshModel::GetFace(int index) const
 	return faces[index];
 }
 const glm::vec4 MeshModel::GetVertex(int index) const {
-	float max = getMax();
-	float s = screen / 2 / max;
-	glm::vec3 ret;
-	for (int i = 0; i < 3; i++)
-	{
-		ret.x = (vertices[index].x) * s;
-		ret.y = (vertices[index].y) * s;
-		ret.z = (vertices[index].z) * s;
-	}
-	return glm::vec4(ret, 1.0f);
+	return glm::vec4(vertices[index], 1.0f);
 }
 
 const float MeshModel::getMax() const
@@ -69,6 +60,23 @@ const float MeshModel::getMin() const
 
 		m = std::min(m, vertices[i].x);
 		m = std::min(m, vertices[i].y);
+	}
+	return m;
+}
+
+const glm::vec4 MeshModel::getNormal(int i) const
+{
+	return glm::vec4(normals[i], 0.0f);
+}
+
+const float MeshModel::getMaxNormal() const
+{
+	float m = 0.0f;
+	for (int i = 0; i < normals.size(); i++)
+	{
+
+		m = std::max(m, normals[i].x);
+		m = std::max(m, normals[i].y);
 	}
 	return m;
 }

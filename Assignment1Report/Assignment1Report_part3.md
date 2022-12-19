@@ -61,3 +61,9 @@ the diffrence is clearly visible, the more the mesh is near the bigger the mesh 
 ![image](https://user-images.githubusercontent.com/116717525/208476741-4c4768fe-540f-47fe-b6ca-1e64c972c13b.png)
 ![image](https://user-images.githubusercontent.com/116717525/208476879-6dace405-c3fe-4c22-bfa1-ecb9a724aedf.png)
 ![image](https://user-images.githubusercontent.com/116717525/208477002-5922ac12-4597-45e3-b7e0-7c72b2f8dfc4.png)
+
+## how the difference between changing the zoom (by changing the size of the frustum) and moving closer or farther from the model.
+![Mesh Viewer 12_19_2022 11_38_42 PM](https://user-images.githubusercontent.com/115185916/208529604-ae45e05b-77a5-47f2-ab4f-16aa711f6d8f.png)
+![Mesh Viewer 12_19_2022 11_41_00 PM](https://user-images.githubusercontent.com/115185916/208529608-6b480162-e0fa-4c5b-b9e6-db33127414fe.png)
+
+

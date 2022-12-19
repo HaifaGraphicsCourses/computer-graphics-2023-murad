@@ -215,6 +215,7 @@ bool orthoProjectionControl = false;
 bool PerspictiveProjectionControl = false;
 bool localcam = false;
 bool worldcam = false;
+bool dolly = false;
 
 void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 {
@@ -271,6 +272,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				orthoProjectionControl = true;
 			if (ImGui::MenuItem("Perspictive Projection"))
 				PerspictiveProjectionControl = true;
+			if (ImGui::MenuItem("dolly zoom"))
+				dolly = true;
 			ImGui::EndMenu();
 		}
 
@@ -344,6 +347,23 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			orthoProjectionControl = false;
 		ImGui::End();
 	}
+
+	if (dolly == 1)
+	{
+		static float f = 0.0f;
+		ImGui::Begin("orho projection control");
+		ImGui::SliderFloat("left", &f, 0, 1.0f);
+		scene.GetCamera(0).down = -windowHeight - 1000 *f;
+		scene.GetCamera(0).up = windowHeight + 1000 *f;
+		scene.GetCamera(0).left = -windowWidth - 1000 *f;
+		scene.GetCamera(0).right = windowWidth + 1000 *f;
+		scene.GetCamera(0).near2 = 1.0f + f;
+
+		if (ImGui::Button("Close Me"))
+			dolly = false;
+		ImGui::End();
+	} 
+
 	if (PerspictiveProjectionControl == 1)
 	{
 		static float n = 0.01f;

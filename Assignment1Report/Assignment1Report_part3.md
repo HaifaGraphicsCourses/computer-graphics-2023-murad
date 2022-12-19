@@ -53,3 +53,5 @@ every vertex normal has more than one normal, one foe every face we add the norm
 ![Mesh Viewer 12_18_2022 9_58_53 PM](https://user-images.githubusercontent.com/115185916/208316859-404773e2-db66-4533-9ec7-ac4e0c9732dc.png)
 ![Mesh Viewer 12_18_2022 9_59_13 PM](https://user-images.githubusercontent.com/115185916/208316861-83b973e4-6379-4d7f-9f23-64176d16ff03.png)
 
+## implement a perspective projection and compare the orthographic projection vs. the perspective projection
+the diffrence is clearly visible between orthographic projection and perspective projection, thanks to glm::ortho and glm::frustrum, we compared the diffrences by this functions, the glm::ortho or the orthographic projection is stable and dont change by the camera view, dont change by the translations in z ratio otherwise the perspictive projection is senstive to translating in all directions,its small when its far from the camera line, and getting bigger while getting closer to the camera center.

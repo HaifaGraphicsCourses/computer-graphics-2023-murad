@@ -48,7 +48,7 @@ https://user-images.githubusercontent.com/115185916/208265622-f7b58484-2c61-4a15
 
 ## Compute and display the face normals and vertex normals
 
-every vertex normal has more than one normal, one foe every face we add the normal to the vertex coordinates and then scale it to draw a line between the vertex and the new created normal, while face normals are different firs we find the normal using cross(v2-v1, v3-v1) and then normalize it then we find the middle of each edge in the face and do the same here like we did in the vertex normal we add them then scale...
+every vertex normal has more than one normal, one for every face we add the normal to the vertex coordinates and then scale it to draw a line between the vertex and the new created normal, while face normals are different firs we find the normal using cross(v2-v1, v3-v1) and then normalize it then we find the middle of each edge in the face and do the same here like we did in the vertex normal we add them then scale...
 ![Mesh Viewer 12_18_2022 9_59_20 PM](https://user-images.githubusercontent.com/115185916/208316858-0e63047c-8698-4e09-ab5f-c5ce21bb34d4.png)
 ![Mesh Viewer 12_18_2022 9_58_53 PM](https://user-images.githubusercontent.com/115185916/208316859-404773e2-db66-4533-9ec7-ac4e0c9732dc.png)
 ![Mesh Viewer 12_18_2022 9_59_13 PM](https://user-images.githubusercontent.com/115185916/208316861-83b973e4-6379-4d7f-9f23-64176d16ff03.png)
@@ -61,3 +61,9 @@ the diffrence is clearly visible, the more the mesh is near the bigger the mesh 
 ![image](https://user-images.githubusercontent.com/116717525/208476741-4c4768fe-540f-47fe-b6ca-1e64c972c13b.png)
 ![image](https://user-images.githubusercontent.com/116717525/208476879-6dace405-c3fe-4c22-bfa1-ecb9a724aedf.png)
 ![image](https://user-images.githubusercontent.com/116717525/208477002-5922ac12-4597-45e3-b7e0-7c72b2f8dfc4.png)
+
+## how the difference between changing the zoom (by changing the size of the frustum) and moving closer or farther from the model.
+![Mesh Viewer 12_19_2022 11_38_42 PM](https://user-images.githubusercontent.com/115185916/208529604-ae45e05b-77a5-47f2-ab4f-16aa711f6d8f.png)
+![Mesh Viewer 12_19_2022 11_41_00 PM](https://user-images.githubusercontent.com/115185916/208529608-6b480162-e0fa-4c5b-b9e6-db33127414fe.png)
+
+

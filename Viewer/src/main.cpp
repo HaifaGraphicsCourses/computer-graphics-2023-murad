@@ -167,6 +167,14 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 		{
 			scene.GetCamera(0).translatey += 10;
 		}
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		{
+			scene.GetCamera(0).translatez += 10;
+		}
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		{
+			scene.GetCamera(0).translatez -= 10;
+		}
 	}
 
 
@@ -204,6 +212,7 @@ bool local = false;
 bool world = false;
 bool change = false;
 bool orthoProjectionControl = false;
+bool PerspictiveProjectionControl = false;
 bool localcam = false;
 bool worldcam = false;
 
@@ -260,6 +269,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				worldcam = true;
 			if (ImGui::MenuItem("Ortho Projection"))
 				orthoProjectionControl = true;
+			if (ImGui::MenuItem("Perspictive Projection"))
+				PerspictiveProjectionControl = true;
 			ImGui::EndMenu();
 		}
 
@@ -327,8 +338,23 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
 		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
 		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
-		ImGui::SliderFloat("near", &n, 0, 100);
-		ImGui::SliderFloat("far", &f, 0, 200);
+		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.0f, 100.0f);
+		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
+		if (ImGui::Button("Close Me"))
+			orthoProjectionControl = false;
+		ImGui::End();
+	}
+	if (PerspictiveProjectionControl == 1)
+	{
+		static float n = 0.01f;
+		static float f = 100.0f;
+		ImGui::Begin("Perspictive projection control");
+		ImGui::SliderFloat("left", &scene.GetCamera(0).left, -windowWidth * 4, windowWidth * 2);
+		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
+		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
+		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
+		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.0f, 100.0f);
+		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
 		if (ImGui::Button("Close Me"))
 			orthoProjectionControl = false;
 		ImGui::End();
@@ -340,7 +366,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float f = 1.0f;
 		ImGui::SliderFloat("X", &scene.GetCamera(0).translatex, -680, 680);
 		ImGui::SliderFloat("Y", &scene.GetCamera(0).translatey, -340, 340);
-		ImGui::SliderFloat("Z", &f, -340, 340);
+		ImGui::SliderFloat("Z", &scene.GetCamera(0).translatez, -340, 340);
 		ImGui::SliderFloat("rotate", &scene.GetCamera(0).rotate, -360.0f, 360.0f);
 		if (ImGui::Button("Close Me"))
 			localcam = false;
@@ -353,7 +379,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float f = 1.0f;
 		ImGui::SliderFloat("X", &scene.GetCamera(0).Wtranslatex, -680, 680);
 		ImGui::SliderFloat("Y", &scene.GetCamera(0).Wtranslatey, -340, 340);
-		ImGui::SliderFloat("Z", &f, -340, 340);
+		ImGui::SliderFloat("Z", &scene.GetCamera(0).Wtranslatez, -340, 340);
 		ImGui::SliderFloat("rotate", &scene.GetCamera(0).Wrotate, -360.0f, 360.0f);
 		if (ImGui::Button("Close Me"))
 			worldcam = false;

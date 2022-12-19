@@ -18,7 +18,7 @@ public:
 	const float getMin() const;
 	const glm::vec4 getNormal(int i) const;
 	const float getMaxNormal() const;
-	
+
 	float scalex = 1.0f;
 	float scaley = 1.0f;
 	float translatex = 0.0f;
@@ -36,5 +36,5 @@ private:
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
 	std::string model_name;
-	
 };
+

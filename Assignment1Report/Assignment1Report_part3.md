@@ -55,3 +55,9 @@ every vertex normal has more than one normal, one foe every face we add the norm
 
 ## implement a perspective projection and compare the orthographic projection vs. the perspective projection
 the diffrence is clearly visible between orthographic projection and perspective projection, thanks to glm::ortho and glm::frustrum, we compared the diffrences by this functions, the glm::ortho or the orthographic projection is stable and dont change by the camera view, dont change by the translations in z ratio otherwise the perspictive projection is senstive to translating in all directions,its small when its far from the camera line, and getting bigger while getting closer to the camera center.
+
+## how the difference between changing the zoom and moving closer or farther from the model
+the diffrence is clearly visible, the more the mesh is near the bigger the mesh is:
+![image](https://user-images.githubusercontent.com/116717525/208476741-4c4768fe-540f-47fe-b6ca-1e64c972c13b.png)
+![image](https://user-images.githubusercontent.com/116717525/208476879-6dace405-c3fe-4c22-bfa1-ecb9a724aedf.png)
+![image](https://user-images.githubusercontent.com/116717525/208477002-5922ac12-4597-45e3-b7e0-7c72b2f8dfc4.png)

@@ -20,10 +20,10 @@
 //glm::vec3 cameraTarget = glm::vec3(1.0f, 0.0f, -1.0f);
 //glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 //glm::mat4 view = glm::lookAt(cameraPos, cameraTarget + cameraPos, up);
-glm::vec3 cameraPos = glm::vec3(720.0f, 360.0f, 0.0f);
-glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec3 up = glm::vec3(1.0f, 1.0f, 1.0f);
-glm::mat4 view = glm::lookAt(cameraPos, cameraTarget + cameraPos, up);
+//glm::vec3 cameraPos = glm::vec3(720.0f, 360.0f, 0.0f);
+//glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+//glm::vec3 up = glm::vec3(1.0f, 1.0f, 1.0f);
+//glm::mat4 view = glm::lookAt(cameraPos, cameraTarget + cameraPos, up);
 Camera::Camera()
 {
 	
@@ -36,14 +36,14 @@ Camera::~Camera()
 
 void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const glm::vec3& up)
 {
-	
+	view_transformation =glm::lookAt(eye, eye + at, up);
 }
 
 
 const glm::mat4x4& Camera::GetProjectionTransformation() const
 {
-	//return glm::ortho(left, right, down, up, 0.1f, 100.0f);
-	return glm::frustum(left, right, down, up, near2, far2);
+	return glm::ortho(left, right, down, up, 0.1f, 100.0f);
+	//return glm::frustum(left, right, down, up, near2, far2);
 }
 
 const glm::mat4x4& Camera::GetViewTransformation() const

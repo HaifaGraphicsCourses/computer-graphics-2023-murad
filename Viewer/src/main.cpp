@@ -338,7 +338,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
 		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
 		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
-		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.0f, 100.0f);
+		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
 		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
 		if (ImGui::Button("Close Me"))
 			orthoProjectionControl = false;
@@ -353,7 +353,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
 		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
 		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
-		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.0f, 100.0f);
+		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
 		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
 		if (ImGui::Button("Close Me"))
 			orthoProjectionControl = false;

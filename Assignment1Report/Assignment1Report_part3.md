@@ -69,3 +69,7 @@ the diffrence is clearly visible, the more the mesh is near the bigger the mesh 
 ## Put at least two screenshots showing multiple models and cameras on screen.
 ![image](https://user-images.githubusercontent.com/116717525/208680140-32b8945e-0d4d-42fa-884f-e3f0df6e53f7.png)
 ![image](https://user-images.githubusercontent.com/116717525/208683499-6095a2fe-099f-42ba-b8f6-6476f28d31c4.png)
+
+## Put a screenshot showing as much of your GUI as possible.
+![image](https://user-images.githubusercontent.com/116717525/208701970-1b6bdb7a-0063-41ed-9a8b-296b290e4b4d.png)
+![image](https://user-images.githubusercontent.com/116717525/208702076-edcc2191-c512-41a1-8b77-76f4e4868c79.png)

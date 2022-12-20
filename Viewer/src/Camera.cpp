@@ -20,9 +20,9 @@
 //glm::vec3 cameraTarget = glm::vec3(1.0f, 0.0f, -1.0f);
 //glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 //glm::mat4 view = glm::lookAt(cameraPos, cameraTarget + cameraPos, up);
-glm::vec3 cameraPos = glm::vec3(3.0f, 3.0f, 3.0f);
+glm::vec3 cameraPos = glm::vec3(720.0f, 360.0f, 0.0f);
 glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 up = glm::vec3(1.0f, 1.0f, 1.0f);
 glm::mat4 view = glm::lookAt(cameraPos, cameraTarget + cameraPos, up);
 Camera::Camera()
 {

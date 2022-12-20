@@ -356,7 +356,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
 		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
 		if (ImGui::Button("Close Me"))
-			orthoProjectionControl = false;
+			PerspictiveProjectionControl = false;
 		ImGui::End();
 	}
 

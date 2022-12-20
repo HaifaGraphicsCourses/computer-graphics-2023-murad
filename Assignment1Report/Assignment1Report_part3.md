@@ -71,5 +71,8 @@ the diffrence is clearly visible, the more the mesh is near the bigger the mesh 
 ![image](https://user-images.githubusercontent.com/116717525/208683499-6095a2fe-099f-42ba-b8f6-6476f28d31c4.png)
 
 ## Put a screenshot showing as much of your GUI as possible.
-![image](https://user-images.githubusercontent.com/116717525/208701970-1b6bdb7a-0063-41ed-9a8b-296b290e4b4d.png)
-![image](https://user-images.githubusercontent.com/116717525/208702076-edcc2191-c512-41a1-8b77-76f4e4868c79.png)
+![image](https://user-images.githubusercontent.com/116717525/208709492-ac6cfb82-62ad-4504-be01-dfed228b779d.png)
+![image](https://user-images.githubusercontent.com/116717525/208709591-0b869367-47a3-4e5a-a106-53036e9d75e2.png)
+![image](https://user-images.githubusercontent.com/116717525/208709697-bd0e6f08-c380-45c0-9123-06d96a9d578b.png)
+
+

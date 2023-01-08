@@ -42,13 +42,13 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 
 const glm::mat4x4& Camera::GetProjectionTransformation() const
 {
-	return glm::ortho(left, right, down, up, 0.1f, 100.0f);
+	return glm::ortho(left, right, down, up, 1.0f, 100.0f);
 	//return glm::frustum(left, right, down, up, near2, far2);
 }
 
 const glm::mat4x4& Camera::GetViewTransformation() const
 {
-	/*glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(translatex, translatey, translatez));
+	glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(translatex, translatey, translatez));
 	float o = -rotate * M_PI / 180;
 	glm::mat4x4 rotate(cos(o), -sin(o), 0, 0, sin(o), cos(o), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
@@ -56,8 +56,8 @@ const glm::mat4x4& Camera::GetViewTransformation() const
 	float w = -Wrotate * M_PI / 180;
 	glm::mat4x4 wrotate(cos(w), -sin(w), 0, 0, sin(w), cos(w), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
-	return glm::inverse(wtranslate * wrotate * translate * rotate);*/
+	return glm::inverse(wtranslate * wrotate * translate * rotate);
 
-	return glm::lookAt(glm::vec3(10, 10, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	//return glm::lookAt(glm::vec3(10, 10, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 }
 

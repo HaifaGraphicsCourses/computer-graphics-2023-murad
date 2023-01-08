@@ -54,12 +54,11 @@ const float MeshModel::getMax() const
 
 const float MeshModel::getMin() const
 {
-	float m = 1000.0f;
+	float m = -100.0f;
 	for (int i = 0; i < vertices.size(); i++)
 	{
-
-		m = std::min(m, vertices[i].x);
-		m = std::min(m, vertices[i].y);
+		m = std::max(m, abs(vertices[i].z));
+		m = std::max(m, vertices[i].z);
 	}
 	return m;
 }

@@ -5,7 +5,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <nfd.h>
-
+#include <glm/gtx/transform.hpp>
+#include <glm/glm.hpp>
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
@@ -175,6 +176,15 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 		{
 			scene.GetCamera(0).translatez -= 10;
 		}
+		if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+		{
+			float random =0.1f+ (rand() % 720);
+			scene.GetCamera(0).left = -random;
+			scene.GetCamera(0).right = random ;
+			scene.GetCamera(0).down = -random;
+			scene.GetCamera(0).up = random ;
+
+		}
 	}
 
 
@@ -188,6 +198,7 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 			scene.GetCamera(0).translatey -= mouse.y / 50;
 		}
 	}
+
 
 	renderer.ClearColorBuffer(clear_color);
 	renderer.Render(scene);
@@ -332,6 +343,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::End();
 	}
 
+
 	if (orthoProjectionControl == 1)
 	{
 		static float n = 0.01f;
@@ -341,7 +353,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
 		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
 		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
-		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.0f, 100.0f);
+		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
 		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
 		if (ImGui::Button("Close Me"))
 			orthoProjectionControl = false;
@@ -373,10 +385,10 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
 		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
 		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
-		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.0f, 100.0f);
-		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
+		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
+		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 5.0f, 100.0f);
 		if (ImGui::Button("Close Me"))
-			orthoProjectionControl = false;
+			PerspictiveProjectionControl = false;
 		ImGui::End();
 	}
 

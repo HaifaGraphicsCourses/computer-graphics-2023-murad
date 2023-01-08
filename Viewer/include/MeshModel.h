@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include "Face.h"
+#include "Camera.h"
 
 class MeshModel
 {
@@ -19,6 +20,7 @@ public:
 	const glm::vec4 getNormal(int i) const;
 	const float getMaxNormal() const;
 
+
 	float scalex = 1.0f;
 	float scaley = 1.0f;
 	float translatex = 0.0f;
@@ -28,6 +30,7 @@ public:
 	float Wscaley = 1.0f;
 	float Wtranslatex = 0.0f;
 	float Wtranslatey = 0.0f;
+	float Wtranslatez = 0.0f;
 	float Wrotate = 0.0f;
 
 	int screen;

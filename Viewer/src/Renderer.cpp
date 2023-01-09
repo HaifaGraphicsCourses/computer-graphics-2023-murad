@@ -311,11 +311,62 @@ void Renderer::Render(const Scene& scene)
 			v3.y *= s;
 
 			float maxv = mesh.getMin();
-			float d =  500 / maxv;
-			v1.z *= d;
-			v2.z *= d;
-			v3.z *= d;
-			
+			int z1 = (v1.z / maxv + 1) * 10;
+			int z2 = (v2.z / maxv + 1) * 10;
+			int z3 = (v3.z / maxv + 1) * 10;
+
+			/*cout << z1 << endl;
+			cout << z2 << endl;
+			cout << z1 << endl;*/
+
+			glm::vec3 color;
+
+			int depth = (z1 + z2 + z3) / 3;
+			if (depth == 0)
+				color = glm::vec3(0, 0, 0);
+			if (depth == 1)
+				color = glm::vec3(1, 0, 0);
+			if (depth == 2)
+				color = glm::vec3(0, 1, 0);
+			if (depth == 3)
+				color = glm::vec3(1, 1, 0);
+			if (depth == 4)
+				color = glm::vec3(0, 0, 1);
+			if (depth == 5)
+				color = glm::vec3(1, 0, 1);
+			if (depth == 6)
+				color = glm::vec3(0, 1, 1);
+			if (depth == 7)
+				color = glm::vec3(1, 1, 1);
+			if (depth == 8)
+				color = glm::vec3(1, 0.5, 0);
+			if (depth == 9)
+				color = glm::vec3(1, 0, 0.5);
+			if (depth == 10)
+				color = glm::vec3(1, 0.5, 0.5);
+			if (depth == 11)
+				color = glm::vec3(0.5, 0, 0);
+			if (depth == 12)
+				color = glm::vec3(0.5, 0.5, 0.5);
+			if (depth == 13)
+				color = glm::vec3(0, 0.5, 0);
+			if (depth == 14)
+				color = glm::vec3(0, 0, 0.5);
+			if (depth == 15)
+				color = glm::vec3(0.5, 0, 0.5);
+			if (depth == 16)
+				color = glm::vec3(0, 1, 0.5);
+			if (depth == 17)
+				color = glm::vec3(1, 1, 0.5);
+			if (depth == 18)
+				color = glm::vec3(1, 0, 0.5);
+			if (depth == 19)
+				color = glm::vec3(0.5, 0.5, 1);
+			if (depth == 20)
+				color = glm::vec3(0.5, 0, 1);
+
+			//cout << depth << endl;
+
 			v1 = proj * view * world * modelMatrix * v1;
 			v2 = proj * view * world * modelMatrix * v2;
 			v3 = proj * view * world * modelMatrix * v3;
@@ -327,9 +378,9 @@ void Renderer::Render(const Scene& scene)
 
 
 
-			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v2.x, v2.y),glm::vec3(0, 0, 0));
-			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
-			DrawLine(glm::vec2(v2.x, v2.y),glm::vec2(v3.x, v3.y),glm::vec3(0, 0, 0));
+			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v2.x, v2.y), glm::vec3(0,0,0));
+			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y), glm::vec3(0,0,0));
+			DrawLine(glm::vec2(v2.x, v2.y),glm::vec2(v3.x, v3.y), glm::vec3(0,0,0));
 
 			
 			if (scene.bounding)
@@ -339,10 +390,10 @@ void Renderer::Render(const Scene& scene)
 				maxY = max(max(v3.y, v2.y), v1.y);
 				minY = min(min(v3.y, v2.y), v1.y);
 				
-				DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), glm::vec3(v1.z,v2.z,v3.z));
-				DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), glm::vec3(v1.z,v2.z,v3.z));
-				DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), glm::vec3(v1.z,v2.z,v3.z));
-				DrawLine(glm::vec2(minX, minY), glm::vec2(maxX, minY), glm::vec3(v1.z,v2.z,v3.z));
+				DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), color);
+				DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), color);
+				DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), color);
+				DrawLine(glm::vec2(minX, minY), glm::vec2(maxX, minY), color);
 			}
 
 		}

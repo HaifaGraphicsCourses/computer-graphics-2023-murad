@@ -30,6 +30,7 @@ public:
 
 	bool bounding = false;
 	bool axis = false;
+	bool fillTriangle = false;
 
 	
 private:

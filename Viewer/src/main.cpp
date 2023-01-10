@@ -270,6 +270,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				change = true;
 			ImGui::Checkbox("Bounding Box", &scene.bounding);
 			ImGui::Checkbox("Show axis", &scene.axis);
+			ImGui::Checkbox("fill triangle", &scene.fillTriangle);
 			ImGui::EndMenu();
 		}
 

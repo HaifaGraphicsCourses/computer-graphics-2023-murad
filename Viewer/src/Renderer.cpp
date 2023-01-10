@@ -287,15 +287,15 @@ void Renderer::Render(const Scene& scene)
 		glm::mat4 modelMatrix = mesh.GetTransformation();
 		glm::mat4 world = mesh.GetWorld();
 
-			float maxX = -1000; float minX = 1000;
-			float maxY = -1000; float minY = 1000;
-		
+		float maxX = 0; float minX = 0;
+		float maxY = 0; float minY = 0;
+
 		for (int i = 0; i < faceCount; i++)
 		{
 			auto face = mesh.GetFace(i);
-			auto v1 =  mesh.GetVertex((face.GetVertexIndex(0) - 1));
-			auto v2 =  mesh.GetVertex((face.GetVertexIndex(1) - 1));
-			auto v3 =  mesh.GetVertex((face.GetVertexIndex(2) - 1));
+			auto v1 = mesh.GetVertex((face.GetVertexIndex(0) - 1));
+			auto v2 = mesh.GetVertex((face.GetVertexIndex(1) - 1));
+			auto v3 = mesh.GetVertex((face.GetVertexIndex(2) - 1));
 
 			auto n1 = mesh.getNormal((face.GetNormalIndex(0) - 1));
 			auto n2 = mesh.getNormal((face.GetNormalIndex(1) - 1));
@@ -376,29 +376,88 @@ void Renderer::Render(const Scene& scene)
 			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
 			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
 
+			v1.x = (int)v1.x;
+			v1.y = (int)v1.y;
+			v2.x = (int)v2.x;
+			v2.y = (int)v2.y;
+			v3.x = (int)v3.x;
+			v3.y = (int)v3.y;
+
+			/*cout << v1.x << endl;
+			cout << v2.x << endl;
+			cout << v3.x << endl;
+			cout << v1.y << endl;
+			cout << v2.y << endl;
+			cout << v3.y << endl;*/
 
 
-			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v2.x, v2.y), glm::vec3(0,0,0));
-			DrawLine(glm::vec2(v1.x, v1.y),glm::vec2(v3.x, v3.y), glm::vec3(0,0,0));
-			DrawLine(glm::vec2(v2.x, v2.y),glm::vec2(v3.x, v3.y), glm::vec3(0,0,0));
 
-			
+			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v2.x, v2.y), glm::vec3(0, 0, 0));
+			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
+			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
+
+
 			if (scene.bounding)
 			{
 				maxX = max(max(v3.x, v2.x), v1.x);
 				minX = min(min(v3.x, v2.x), v1.x);
 				maxY = max(max(v3.y, v2.y), v1.y);
 				minY = min(min(v3.y, v2.y), v1.y);
-				
+
 				DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), color);
 				DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), color);
 				DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), color);
 				DrawLine(glm::vec2(minX, minY), glm::vec2(maxX, minY), color);
 			}
 
-		}
+			if (scene.fillTriangle)
+			{
 
-		
+				// Sort the vertices by y-coordinate.
+				if (v1.y > v2.y) std::swap(v1, v2);
+				if (v1.y > v3.y) std::swap(v1, v3);
+				if (v2.y > v3.y) std::swap(v2, v3);
+
+				// Initialize the scanline y to the y-coordinate of the first vertex.
+				int fy = v1.y;
+
+				// Initialize the edge walkers for the two edges that intersect the scanline.
+				int fx1 = v1.x;
+				int fx2 = v1.x;
+				if (v2.y != v1.y && v3.y != v1.y)
+				{
+					int fdx1 = (v2.x - v1.x) / (v2.y - v1.y);
+					int fdx2 = (v3.x - v1.x) / (v3.y - v1.y);
+
+					cout << "v1" << v1.y << endl;
+					cout << "v2" << v2.y << endl;
+					cout << "v3" << v3.y << endl;
+
+					// Walk the edges of the triangle.
+					while (fy <= v3.y) {
+						// Fill the pixels between the two intersections on the scanline.
+						if (fx1 < fx2) {
+							for (int fx = fx1; fx < fx2; ++fx) {
+								PutPixel(fx, fy, color);
+							}
+						}
+						else {
+							for (int fx = fx2; fx < fx1; ++fx) {
+								PutPixel(fx, fy, color);
+							}
+						}
+
+						// Increment the y-coordinate of the scanline.
+						++fy;
+
+						// Update the edge walkers to move them one scanline down.
+						fx1 += fdx1;
+						fx2 += fdx2;
+					}
+				}
+			}
+
+	}
 
 		if (scene.axis)
 		{

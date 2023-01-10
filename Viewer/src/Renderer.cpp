@@ -323,7 +323,7 @@ void Renderer::Render(const Scene& scene)
 
 			int depth = (z1 + z2 + z3) / 3;
 			if (depth == 0)
-				color = glm::vec3(0, 0, 0);
+				color = glm::vec3(0, 0.5, 0);
 			if (depth == 1)
 				color = glm::vec3(1, 0, 0);
 			if (depth == 2)
@@ -396,14 +396,13 @@ void Renderer::Render(const Scene& scene)
 			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
 			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
 
-
-			if (scene.bounding)
-			{
 				maxX = max(max(v3.x, v2.x), v1.x);
 				minX = min(min(v3.x, v2.x), v1.x);
 				maxY = max(max(v3.y, v2.y), v1.y);
 				minY = min(min(v3.y, v2.y), v1.y);
 
+			if (scene.bounding)
+			{
 				DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), color);
 				DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), color);
 				DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), color);
@@ -412,47 +411,29 @@ void Renderer::Render(const Scene& scene)
 
 			if (scene.fillTriangle)
 			{
+				for (int y = minY; y <= maxY; y++) {
+					for (int x = minX; x <= maxX; x++) {
+						// Compute the barycentric coordinates of the pixel
+						glm::vec4 p(x, y, 0, 0);
+						float u, v, w;
+						glm::vec4 v2v1 = v2 - v1;
+						glm::vec4 v3v1 = v3 - v1;
+						glm::vec4 pv1 = p - v1;
+						float d00 = dot(v2v1, v2v1);
+						float d01 = dot(v2v1, v3v1);
+						float d11 = dot(v3v1, v3v1);
+						float d20 = dot(pv1, v2v1);
+						float d21 = dot(pv1, v3v1);
+						float denom = d00 * d11 - d01 * d01;
+						v = (d11 * d20 - d01 * d21) / denom;
+						w = (d00 * d21 - d01 * d20) / denom;
+						u = 1.0f - v - w;
 
-				// Sort the vertices by y-coordinate.
-				if (v1.y > v2.y) std::swap(v1, v2);
-				if (v1.y > v3.y) std::swap(v1, v3);
-				if (v2.y > v3.y) std::swap(v2, v3);
-
-				// Initialize the scanline y to the y-coordinate of the first vertex.
-				int fy = v1.y;
-
-				// Initialize the edge walkers for the two edges that intersect the scanline.
-				int fx1 = v1.x;
-				int fx2 = v1.x;
-				if (v2.y != v1.y && v3.y != v1.y)
-				{
-					int fdx1 = (v2.x - v1.x) / (v2.y - v1.y);
-					int fdx2 = (v3.x - v1.x) / (v3.y - v1.y);
-
-					cout << "v1" << v1.y << endl;
-					cout << "v2" << v2.y << endl;
-					cout << "v3" << v3.y << endl;
-
-					// Walk the edges of the triangle.
-					while (fy <= v3.y) {
-						// Fill the pixels between the two intersections on the scanline.
-						if (fx1 < fx2) {
-							for (int fx = fx1; fx < fx2; ++fx) {
-								PutPixel(fx, fy, color);
-							}
+						// Check if the pixel is inside the triangle
+						if (u >= 0 && v >= 0 && w >= 0) {
+							// Mark the pixel as inside
+							PutPixel(x, y, color);
 						}
-						else {
-							for (int fx = fx2; fx < fx1; ++fx) {
-								PutPixel(fx, fy, color);
-							}
-						}
-
-						// Increment the y-coordinate of the scanline.
-						++fy;
-
-						// Update the edge walkers to move them one scanline down.
-						fx1 += fdx1;
-						fx2 += fdx2;
 					}
 				}
 			}

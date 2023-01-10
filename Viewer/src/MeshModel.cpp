@@ -36,6 +36,7 @@ const Face& MeshModel::GetFace(int index) const
 {
 	return faces[index];
 }
+
 const glm::vec4 MeshModel::GetVertex(int index) const {
 	return glm::vec4(vertices[index], 1.0f);
 }

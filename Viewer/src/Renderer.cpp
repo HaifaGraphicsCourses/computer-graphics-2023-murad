@@ -374,8 +374,6 @@ void Renderer::Render(const Scene& scene)
 			v2 = proj * view * world * modelMatrix * v2;
 			v3 = proj * view * world * modelMatrix * v3;
 
-			cout << v2.z << endl;
-
 
 			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
 			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
@@ -432,8 +430,6 @@ void Renderer::Render(const Scene& scene)
 						v = (d11 * d20 - d01 * d21) / denom;
 						w = (d00 * d21 - d01 * d20) / denom;
 						u = 1.0f - v - w;
-						/*auto r = (float)(rand()) / (float)(RAND_MAX);
-						cout << r << endl;*/
 
 						// Check if the pixel is inside the triangle
 						if (u >= 0 && v >= 0 && w >= 0) {

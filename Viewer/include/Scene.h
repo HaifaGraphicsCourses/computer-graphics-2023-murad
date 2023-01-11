@@ -31,6 +31,7 @@ public:
 	bool bounding = false;
 	bool axis = false;
 	bool fillTriangle = false;
+	bool grey_scale = false;
 
 	
 private:

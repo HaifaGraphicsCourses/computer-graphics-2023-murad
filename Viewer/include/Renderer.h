@@ -26,6 +26,7 @@ private:
 	void InitOpenglRendering();
 
 	float* color_buffer;
+	float* z_buffer;
 	
 	GLuint gl_screen_tex;
 	GLuint gl_screen_vtc;

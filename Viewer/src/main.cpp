@@ -271,6 +271,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			ImGui::Checkbox("Bounding Box", &scene.bounding);
 			ImGui::Checkbox("Show axis", &scene.axis);
 			ImGui::Checkbox("fill triangle", &scene.fillTriangle);
+			ImGui::Checkbox("gray sclae z_buffer", &scene.grey_scale);
 			ImGui::EndMenu();
 		}
 

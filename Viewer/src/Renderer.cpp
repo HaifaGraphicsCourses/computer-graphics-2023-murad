@@ -22,6 +22,7 @@ Renderer::Renderer(int viewport_width, int viewport_height) :
 Renderer::~Renderer()
 {
 	delete[] color_buffer;
+	delete[] z_buffer;
 }
 
 void Renderer::PutPixel(int i, int j, const glm::vec3& color)
@@ -119,6 +120,7 @@ void Renderer::CreateBuffers(int w, int h)
 {
 	CreateOpenglBuffer(); //Do not remove this line.
 	color_buffer = new float[3 * w * h];
+	z_buffer = new float[3 * w * h];
 	ClearColorBuffer(glm::vec3(0.0f, 0.0f, 0.0f));
 }
 
@@ -242,6 +244,7 @@ void Renderer::ClearColorBuffer(const glm::vec3& color)
 		for (int j = 0; j < viewport_height; j++)
 		{
 			PutPixel(i, j, color);
+			z_buffer[Z_INDEX(viewport_width, i, j)] = std::numeric_limits<float>::max();
 		}
 	}
 }
@@ -371,6 +374,8 @@ void Renderer::Render(const Scene& scene)
 			v2 = proj * view * world * modelMatrix * v2;
 			v3 = proj * view * world * modelMatrix * v3;
 
+			cout << v2.z << endl;
+
 
 			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
 			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
@@ -392,9 +397,9 @@ void Renderer::Render(const Scene& scene)
 
 
 
-			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v2.x, v2.y), glm::vec3(0, 0, 0));
-			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
-			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
+			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v2.x, v2.y), glm::vec3(0,0,0));
+			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0,0,0));
+			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0,0,0));
 
 				maxX = max(max(v3.x, v2.x), v1.x);
 				minX = min(min(v3.x, v2.x), v1.x);
@@ -428,10 +433,46 @@ void Renderer::Render(const Scene& scene)
 						v = (d11 * d20 - d01 * d21) / denom;
 						w = (d00 * d21 - d01 * d20) / denom;
 						u = 1.0f - v - w;
+						/*auto r = (float)(rand()) / (float)(RAND_MAX);
+						cout << r << endl;*/
 
 						// Check if the pixel is inside the triangle
 						if (u >= 0 && v >= 0 && w >= 0) {
 							// Mark the pixel as inside
+							PutPixel(x, y, color);
+						}
+					}
+				}
+			}
+
+			if (scene.grey_scale)
+			{
+				for (int y = minY; y <= maxY; y++) {
+					for (int x = minX; x <= maxX; x++) {
+						// Compute the barycentric coordinates of the pixel
+						glm::vec4 p(x, y, 0, 0);
+						float u, v, w;
+						glm::vec4 v2v1 = v2 - v1;
+						glm::vec4 v3v1 = v3 - v1;
+						glm::vec4 pv1 = p - v1;
+						float d00 = dot(v2v1, v2v1);
+						float d01 = dot(v2v1, v3v1);
+						float d11 = dot(v3v1, v3v1);
+						float d20 = dot(pv1, v2v1);
+						float d21 = dot(pv1, v3v1);
+						float denom = d00 * d11 - d01 * d01;
+						v = (d11 * d20 - d01 * d21) / denom;
+						w = (d00 * d21 - d01 * d20) / denom;
+						u = 1.0f - v - w;
+
+						// Check if the pixel is inside the triangle
+						if (u >= 0 && v >= 0 && w >= 0) {
+							// Mark the pixel as inside
+							float depth2 = depth / 10.0;
+							z_buffer[Z_INDEX(viewport_width, x, y)] = min(depth2, z_buffer[Z_INDEX(viewport_width, x, y)]);
+							float alpha = z_buffer[Z_INDEX(viewport_width, x, y)];
+							alpha = 1 - alpha;
+							color = glm::vec3(alpha, alpha, alpha);
 							PutPixel(x, y, color);
 						}
 					}

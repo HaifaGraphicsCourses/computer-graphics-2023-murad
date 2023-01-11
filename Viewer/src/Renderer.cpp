@@ -396,10 +396,9 @@ void Renderer::Render(const Scene& scene)
 			cout << v3.y << endl;*/
 
 
-
-			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v2.x, v2.y), glm::vec3(0,0,0));
-			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0,0,0));
-			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0,0,0));
+				DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v2.x, v2.y), glm::vec3(0, 0, 0));
+				DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
+				DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
 
 				maxX = max(max(v3.x, v2.x), v1.x);
 				minX = min(min(v3.x, v2.x), v1.x);

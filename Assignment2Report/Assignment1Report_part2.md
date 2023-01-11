@@ -19,3 +19,7 @@ zbuffer:
 ![Mesh Viewer 1_11_2023 3_55_24 PM](https://user-images.githubusercontent.com/115185916/211824839-657d423c-47ff-4293-aab2-f22a3db055cd.png)
 colorBuffer:
 ![Mesh Viewer 1_10_2023 8_28_10 PM](https://user-images.githubusercontent.com/115185916/211824857-9140d958-00cb-4be6-9fa1-6ffe6924564c.png)
+zbuffer:
+![Mesh Viewer 1_11_2023 4_01_27 PM](https://user-images.githubusercontent.com/115185916/211825645-f0e5ff27-827f-4465-8fc3-4206ebad0cdb.png)
+colorBuffer:
+![Mesh Viewer 1_11_2023 4_02_00 PM](https://user-images.githubusercontent.com/115185916/211825717-0be9397a-cc03-4aa6-94f0-8d87f5bbd4b0.png)

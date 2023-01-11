@@ -11,7 +11,11 @@
 
 ## Implement the z-buffer algorithm. The z-buffer can be visualized as a grey scale image
 
-![Mesh Viewer 1_11_2023 3_54_34 PM](https://user-images.githubusercontent.com/115185916/211824706-6f4fd38f-d0b9-40f6-a463-a2e1c0f151f7.png) 
+zbuffer:
+![Mesh Viewer 1_11_2023 3_54_34 PM](https://user-images.githubusercontent.com/115185916/211824706-6f4fd38f-d0b9-40f6-a463-a2e1c0f151f7.png)
+colorBuffer:
 ![Mesh Viewer 1_10_2023 8_27_40 PM](https://user-images.githubusercontent.com/115185916/211824740-0dc03ccc-35b6-4a52-b7cb-dc1abfdb4939.png)
+zbuffer:
 ![Mesh Viewer 1_11_2023 3_55_24 PM](https://user-images.githubusercontent.com/115185916/211824839-657d423c-47ff-4293-aab2-f22a3db055cd.png)
+colorBuffer:
 ![Mesh Viewer 1_10_2023 8_28_10 PM](https://user-images.githubusercontent.com/115185916/211824857-9140d958-00cb-4be6-9fa1-6ffe6924564c.png)

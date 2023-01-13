@@ -32,6 +32,14 @@ public:
 	bool axis = false;
 	bool fillTriangle = false;
 	bool grey_scale = false;
+	bool normals = false;
+	bool ambient = false;
+
+	float lightx = 690.0f;
+	float lighty = 360.0f;
+	float lightz = 5.0f;
+	float intensity = 1.0f;
+	glm::vec3 light = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	
 private:

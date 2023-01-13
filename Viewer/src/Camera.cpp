@@ -42,7 +42,7 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 
 const glm::mat4x4& Camera::GetProjectionTransformation() const
 {
-	return glm::ortho(left, right, down, up, 1.0f, 2.0f);
+	return glm::ortho(left, right, down, up, 1.0f, 100.0f);
 	//return glm::frustum(left, right, down, up, near2, far2);
 }
 

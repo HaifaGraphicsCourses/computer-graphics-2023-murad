@@ -34,6 +34,9 @@ public:
 	float Wrotate = 0.0f;
 
 	int screen;
+
+	glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+
 private:
 	std::vector<Face> faces;
 	std::vector<glm::vec3> vertices;

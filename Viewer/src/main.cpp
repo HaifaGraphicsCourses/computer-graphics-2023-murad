@@ -227,6 +227,7 @@ bool PerspictiveProjectionControl = false;
 bool localcam = false;
 bool worldcam = false;
 bool dolly = false;
+bool light;
 
 void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 {
@@ -268,6 +269,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				world = true;
 			if (ImGui::MenuItem("select model"))
 				change = true;
+			ImGui::ColorEdit3("model color", (float*)&scene.GetActiveModel().color);
+			ImGui::Checkbox("Show normals", &scene.normals);
 			ImGui::Checkbox("Bounding Box", &scene.bounding);
 			ImGui::Checkbox("Show axis", &scene.axis);
 			ImGui::Checkbox("fill triangle", &scene.fillTriangle);
@@ -290,13 +293,20 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("light"))
+		{
+			ImGui::Checkbox("ambient", &scene.ambient);
+			light = true;
+			ImGui::EndMenu();
+		}
+
 		// TODO: Add more menubar items (if you want to)
 		ImGui::EndMainMenuBar();
 	}
 
 	// Controls
 	//ImGui::ColorEdit3("Clear Color", (float*)&clear_color);
-	// TODO: Add more controls as needed
+	 //TODO: Add more controls as needed
 	//ImGui::End();
 
 	/**
@@ -343,6 +353,15 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		if (ImGui::Button("Close Me"))
 			change = false;
 		ImGui::End();
+	}
+
+	if (light)
+	{
+		ImGui::SliderFloat("light x", &scene.lightx, 0, windowWidth);
+		ImGui::SliderFloat("light y", &scene.lighty, 0, windowHeight);
+		ImGui::SliderFloat("light z", &scene.lightz, -100, 100);
+		ImGui::SliderFloat("intenseity", &scene.intensity, 0, 1000);
+		ImGui::ColorEdit3("light color", (float*)&scene.light);
 	}
 
 

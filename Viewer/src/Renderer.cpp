@@ -318,10 +318,6 @@ void Renderer::Render(const Scene& scene)
 			int z2 = (v2.z / maxv + 1) * 10;
 			int z3 = (v3.z / maxv + 1) * 10;
 
-			/*cout << z1 << endl;
-			cout << z2 << endl;
-			cout << z1 << endl;*/
-
 			glm::vec3 color;
 
 			int depth = (z1 + z2 + z3) / 3;
@@ -374,29 +370,51 @@ void Renderer::Render(const Scene& scene)
 			v2 = proj * view * world * modelMatrix * v2;
 			v3 = proj * view * world * modelMatrix * v3;
 
+			glm::vec3 fn1(v1.x, v1.y, v1.z);
+			glm::vec3 fn2(v2.x, v2.y, v2.z);
+			glm::vec3 fn3(v3.x, v3.y, v3.z);
+
+			// Compute the face normal
+			glm::vec3 edge1 = fn2 - fn1;
+			glm::vec3 edge2 = fn3 - fn1;
+			glm::vec3 normal = glm::normalize(glm::cross(edge2, edge1));
+
+			// Compute the midpoint of the face
+			glm::vec3 midpoint = (fn1 + fn2 + fn3) / 3.0f;
+
+			// Compute the end point of the normal
+			glm::vec3 end_point = midpoint + normal * 0.1f;
+
+			auto normal1 = v1 + n1 * 0.1f;
+			auto normal2 = v2 + n2 * 0.1f;
+			auto normal3 = v3 + n3 * 0.1f;
 
 			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
 			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
 			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
 
-			v1.x = (int)v1.x;
-			v1.y = (int)v1.y;
-			v2.x = (int)v2.x;
-			v2.y = (int)v2.y;
-			v3.x = (int)v3.x;
-			v3.y = (int)v3.y;
+			normal1.x = (normal1.x + 1) * half_width; normal1.y = (normal1.y + 1) * half_height;
+			normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
+			normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
 
-			/*cout << v1.x << endl;
-			cout << v2.x << endl;
-			cout << v3.x << endl;
-			cout << v1.y << endl;
-			cout << v2.y << endl;
-			cout << v3.y << endl;*/
+			midpoint.x = (midpoint.x + 1) * half_width; midpoint.y = (midpoint.y + 1) * half_height;
+			end_point.x = (end_point.x + 1) * half_width; end_point.y = (end_point.y + 1) * half_height;
 
-
+			if (!scene.fillTriangle && !scene.grey_scale && !scene.ambient)
+			{
 				DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v2.x, v2.y), glm::vec3(0, 0, 0));
 				DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
 				DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
+			}
+
+			if (scene.normals)
+			{
+			DrawLine(glm::vec2(midpoint.x, midpoint.y), glm::vec2(end_point.x, end_point.y), glm::vec3(1, 0, 0));
+			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(normal1.x, normal1.y), glm::vec3(1, 0, 0));
+			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(normal2.x, normal2.y), glm::vec3(1, 0, 0));
+			DrawLine(glm::vec2(v3.x, v3.y), glm::vec2(normal3.x, normal3.y), glm::vec3(1, 0, 0));
+			}
+			
 
 				maxX = max(max(v3.x, v2.x), v1.x);
 				minX = min(min(v3.x, v2.x), v1.x);
@@ -434,7 +452,7 @@ void Renderer::Render(const Scene& scene)
 						// Check if the pixel is inside the triangle
 						if (u >= 0 && v >= 0 && w >= 0) {
 							// Mark the pixel as inside
-							PutPixel(x, y, color);
+							PutPixel(x, y, mesh.color);
 						}
 					}
 				}
@@ -469,6 +487,42 @@ void Renderer::Render(const Scene& scene)
 							alpha = 1 - alpha;
 							color = glm::vec3(alpha, alpha, alpha);
 							PutPixel(x, y, color);
+						}
+					}
+				}
+			}
+
+			if (scene.ambient)
+			{
+				glm::vec3 lightDirection = glm::normalize(glm::vec3(scene.lightx,scene.lighty,scene.lightz) - midpoint);
+				float intensity = dot(lightDirection, end_point);
+				glm::vec3 diffuse = scene.light * max(intensity, 0.0f);
+				glm::vec3 finalColor = scene.light * intensity * mesh.color + diffuse;
+				finalColor += mesh.color;
+				for (int y = minY; y <= maxY; y++) {
+					for (int x = minX; x <= maxX; x++) {
+						// Compute the barycentric coordinates of the pixel
+						glm::vec4 p(x, y, 0, 0);
+						float u, v, w;
+						glm::vec4 v2v1 = v2 - v1;
+						glm::vec4 v3v1 = v3 - v1;
+						glm::vec4 pv1 = p - v1;
+						float d00 = dot(v2v1, v2v1);
+						float d01 = dot(v2v1, v3v1);
+						float d11 = dot(v3v1, v3v1);
+						float d20 = dot(pv1, v2v1);
+						float d21 = dot(pv1, v3v1);
+						float denom = d00 * d11 - d01 * d01;
+						v = (d11 * d20 - d01 * d21) / denom;
+						w = (d00 * d21 - d01 * d20) / denom;
+						u = 1.0f - v - w;
+
+						// Check if the pixel is inside the triangle
+						if (u >= 0 && v >= 0 && w >= 0) {
+							// Mark the pixel as inside
+							/*float depth2 = depth / 10.0;
+							z_buffer[Z_INDEX(viewport_width, x, y)] = min(depth2, z_buffer[Z_INDEX(viewport_width, x, y)]);*/
+							PutPixel(x, y, finalColor);
 						}
 					}
 				}

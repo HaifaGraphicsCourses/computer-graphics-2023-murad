@@ -16,12 +16,23 @@ by this formula -> ambient = ligth color * intensity * model color
 
 
 ## Compute the specular light with Phong shading and show a result.
-https://user-images.githubusercontent.com/115185916/212557377-412b740a-d499-410f-9357-cecd21e795aa.mp4
+![Mesh Viewer 1_15_2023 10_16_20 PM](https://user-images.githubusercontent.com/115185916/212564920-11edb54a-006d-4962-8b46-52528c8d1e61.png)
+
+
+
 
 ## Demonstrate different models, lights and shadings and show the results in the report
-ambient light with flat shading
+![Mesh Viewer 1_15_2023 8_50_26 PM](https://user-images.githubusercontent.com/115185916/212561526-17d4c943-753d-4461-9814-cdf8a55bf10f.png)
 ![Mesh Viewer 1_14_2023 1_35_57 AM](https://user-images.githubusercontent.com/115185916/212558207-517a6c98-0951-493f-bb00-a51a769586eb.png)
-spicular light with gouraud shading
 ![Mesh Viewer 1_15_2023 7_03_36 PM](https://user-images.githubusercontent.com/115185916/212558241-888daf56-1c5b-45ee-8a22-5d31d6217a83.png)
-diffuse light with gouraud shading
 ![Mesh Viewer 1_15_2023 2_44_52 AM](https://user-images.githubusercontent.com/115185916/212558441-6614dbb3-60d1-4389-8b84-4b2b483c61a5.png)
+![Mesh Viewer 1_15_2023 10_01_17 PM](https://user-images.githubusercontent.com/115185916/212564236-c2af3922-6ae3-4401-b7cb-2c901d237927.png)
+
+
+
+https://user-images.githubusercontent.com/115185916/212565111-abf62508-2d57-40c9-ae74-f0c86a052128.mp4
+
+https://user-images.githubusercontent.com/115185916/212561609-fa3233b4-80c8-4ce6-8ce3-9af0e8287d53.mp4
+
+https://user-images.githubusercontent.com/115185916/212565151-f552e751-2d99-4737-abc6-7e5f8c4a140e.mp4
+

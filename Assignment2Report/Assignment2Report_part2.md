@@ -16,6 +16,5 @@ by this formula -> ambient = ligth color * intensity * model color
 
 
 ## Compute the specular light with Phong shading and show a result.
-
-![Mesh Viewer 1_15_2023 3_05_54 AM](https://user-images.githubusercontent.com/115185916/212504006-fd250b3c-9171-4ae6-967f-1200f9dbd00f.png)
+![Mesh Viewer 1_15_2023 2_51_44 PM](https://user-images.githubusercontent.com/115185916/212541816-d9be216f-35a7-4f91-8e6f-f522fcd083ca.png)
 

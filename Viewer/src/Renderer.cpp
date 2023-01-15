@@ -397,8 +397,8 @@ void Renderer::Render(const Scene& scene)
 			normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
 			normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
 
-			midpoint.x = (midpoint.x + 1) * half_width; midpoint.y = (midpoint.y + 1) * half_height;
-			end_point.x = (end_point.x + 1) * half_width; end_point.y = (end_point.y + 1) * half_height;
+			//midpoint.x = (midpoint.x + 1) * half_width; midpoint.y = (midpoint.y + 1) * half_height;
+			//end_point.x = (end_point.x + 1) * half_width; end_point.y = (end_point.y + 1) * half_height;
 
 			if (!scene.fillTriangle && !scene.grey_scale && !scene.ambient)
 			{
@@ -494,11 +494,18 @@ void Renderer::Render(const Scene& scene)
 
 			if (scene.ambient)
 			{
+				
 				glm::vec3 lightDirection = glm::normalize(glm::vec3(scene.lightx,scene.lighty,scene.lightz) - midpoint);
+				cout << glm::to_string(lightDirection) << endl;
+				glm::vec3 viewDir = lightDirection;
 				float intensity = dot(lightDirection, end_point);
+				glm::vec3 reflectDir = glm::reflect(-lightDirection, end_point);
+				cout << glm::to_string(lightDirection) << endl;
 				glm::vec3 diffuse = scene.light * max(intensity, 0.0f);
-				glm::vec3 finalColor = scene.light * intensity * mesh.color + diffuse;
-				finalColor += mesh.color;
+				float spec = pow(max(dot(viewDir, reflectDir), 0.0f), 32);
+				glm::vec3 specular = 0.5f * spec * scene.light;
+				glm::vec3 finalColor = (scene.light * scene.intensity + diffuse + specular) * mesh.color;
+				//finalColor += mesh.color;
 				for (int y = minY; y <= maxY; y++) {
 					for (int x = minX; x <= maxX; x++) {
 						// Compute the barycentric coordinates of the pixel

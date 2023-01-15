@@ -13,3 +13,8 @@ by this formula -> ambient = ligth color * intensity * model color
 ## Compute Gouraud shading and compare the result to the previous result
 ![Mesh Viewer 1_15_2023 2_02_14 AM](https://user-images.githubusercontent.com/115185916/212502432-b320c315-08b1-42a4-9e1a-c228868a9772.png)
 ![Mesh Viewer 1_15_2023 2_04_30 AM](https://user-images.githubusercontent.com/115185916/212502474-71099834-48fc-4697-bd73-5a9de708fa3b.png)
+
+
+## Compute the specular light with Phong shading and show a result.
+
+![Mesh Viewer 1_15_2023 3_05_54 AM](https://user-images.githubusercontent.com/115185916/212504006-fd250b3c-9171-4ae6-967f-1200f9dbd00f.png)

@@ -496,17 +496,14 @@ void Renderer::Render(const Scene& scene)
 			if (scene.ambient)
 			{
 				
-				glm::vec3 lightDirection = glm::normalize(glm::vec3(scene.lightx,scene.lighty,scene.lightz) - midpoint);
-				//cout << glm::to_string(lightDirection) << endl;
-				glm::vec3 viewDir = lightDirection;
+				glm::vec3 ambient = scene.light * 1.0f;
+				glm::vec3 lightDirection = glm::normalize(glm::vec3(scene.lightx, scene.lighty, scene.lightz) - midpoint);
 				float intensity = dot(lightDirection, normal);
+				glm::vec3 diffuse = glm::vec3(1,1,1) * max(intensity, 0.0f);
 				glm::vec3 reflectDir = glm::reflect(-lightDirection, normal);
-				//cout << glm::to_string(reflectDir) << endl;
-				glm::vec3 diffuse = scene.light * max(intensity, 0.0f);
-				//cout << glm::to_string(diffuse) << endl;
-				float spec = pow(max(dot(viewDir, reflectDir), 0.0f), 256);
-				glm::vec3 specular = 10.5f * spec * scene.light;
-				glm::vec3 finalColor = (scene.light * scene.intensity + diffuse + specular) * mesh.color;
+				float spec = pow(max(dot(lightDirection, reflectDir), 0.0f), 32);
+				glm::vec3 specular = spec * glm::vec3(1,1,1);
+				glm::vec3 finalColor = ( specular) * mesh.color;
 				//finalColor += mesh.color;
 				for (int y = minY; y <= maxY; y++) {
 					for (int x = minX; x <= maxX; x++) {

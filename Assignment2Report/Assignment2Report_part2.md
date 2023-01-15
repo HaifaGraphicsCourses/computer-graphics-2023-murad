@@ -21,7 +21,7 @@ https://user-images.githubusercontent.com/115185916/212557377-412b740a-d499-410f
 ## Demonstrate different models, lights and shadings and show the results in the report
 ambient light with flat shading
 ![Mesh Viewer 1_14_2023 1_35_57 AM](https://user-images.githubusercontent.com/115185916/212558207-517a6c98-0951-493f-bb00-a51a769586eb.png)
-spicular light with flat shading
+spicular light with gouraud shading
 ![Mesh Viewer 1_15_2023 7_03_36 PM](https://user-images.githubusercontent.com/115185916/212558241-888daf56-1c5b-45ee-8a22-5d31d6217a83.png)
 diffuse light with gouraud shading
 ![Mesh Viewer 1_15_2023 2_44_52 AM](https://user-images.githubusercontent.com/115185916/212558441-6614dbb3-60d1-4389-8b84-4b2b483c61a5.png)

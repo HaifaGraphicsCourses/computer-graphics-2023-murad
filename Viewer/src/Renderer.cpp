@@ -304,8 +304,12 @@ void Renderer::Render(const Scene& scene)
 			auto n2 = mesh.getNormal((face.GetNormalIndex(1) - 1));
 			auto n3 = mesh.getNormal((face.GetNormalIndex(2) - 1));
 
+			auto normal1 = v1 + n1 * 0.1f;
+			auto normal2 = v2 + n2 * 0.1f;
+			auto normal3 = v3 + n3 * 0.1f;
+
 			float maxy = mesh.getMax();
-			float s = 500 / maxy;
+			float s = 300 / maxy;
 			v1.x *= s;
 			v1.y *= s;
 			v2.x *= s;
@@ -370,6 +374,15 @@ void Renderer::Render(const Scene& scene)
 			v2 = proj * view * world * modelMatrix * v2;
 			v3 = proj * view * world * modelMatrix * v3;
 
+			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
+			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
+			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
+
+
+			//normal1.x = (normal1.x + 1) * half_width; normal1.y = (normal1.y + 1) * half_height;
+			//normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
+			//normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
+
 			glm::vec3 fn1(v1.x, v1.y, v1.z);
 			glm::vec3 fn2(v2.x, v2.y, v2.z);
 			glm::vec3 fn3(v3.x, v3.y, v3.z);
@@ -385,19 +398,7 @@ void Renderer::Render(const Scene& scene)
 			// Compute the end point of the normal
 			glm::vec3 end_point = midpoint + normal * 0.1f;
 
-			auto normal1 = v1 + n1 * 0.1f;
-			auto normal2 = v2 + n2 * 0.1f;
-			auto normal3 = v3 + n3 * 0.1f;
-
-			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
-			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
-			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
-
-			normal1.x = (normal1.x + 1) * half_width; normal1.y = (normal1.y + 1) * half_height;
-			normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
-			normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
-
-			midpoint.x = (midpoint.x + 1) * half_width; midpoint.y = (midpoint.y + 1) * half_height;
+			//midpoint.x = (midpoint.x + 1) * half_width; midpoint.y = (midpoint.y + 1) * half_height;
 			end_point.x = (end_point.x + 1) * half_width; end_point.y = (end_point.y + 1) * half_height;
 
 			if (!scene.fillTriangle && !scene.grey_scale && !scene.ambient)
@@ -502,9 +503,9 @@ void Renderer::Render(const Scene& scene)
 				glm::vec3 reflectDir = glm::reflect(-lightDirection, normal);
 				//cout << glm::to_string(reflectDir) << endl;
 				glm::vec3 diffuse = scene.light * max(intensity, 0.0f);
-				cout << glm::to_string(diffuse) << endl;
-				float spec = pow(max(dot(viewDir, reflectDir), 0.0f), 32);
-				glm::vec3 specular = 0.5f * spec * scene.light;
+				//cout << glm::to_string(diffuse) << endl;
+				float spec = pow(max(dot(viewDir, reflectDir), 0.0f), 256);
+				glm::vec3 specular = 10.5f * spec * scene.light;
 				glm::vec3 finalColor = (scene.light * scene.intensity + diffuse + specular) * mesh.color;
 				//finalColor += mesh.color;
 				for (int y = minY; y <= maxY; y++) {

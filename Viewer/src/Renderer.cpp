@@ -304,10 +304,6 @@ void Renderer::Render(const Scene& scene)
 			auto n2 = mesh.getNormal((face.GetNormalIndex(1) - 1));
 			auto n3 = mesh.getNormal((face.GetNormalIndex(2) - 1));
 
-			auto normal1 = v1 + n1 * 0.1f;
-			auto normal2 = v2 + n2 * 0.1f;
-			auto normal3 = v3 + n3 * 0.1f;
-
 			float maxy = mesh.getMax();
 			float s = 300 / maxy;
 			v1.x *= s;
@@ -374,14 +370,19 @@ void Renderer::Render(const Scene& scene)
 			v2 = proj * view * world * modelMatrix * v2;
 			v3 = proj * view * world * modelMatrix * v3;
 
+			auto normal1 = v1 + n1 * 0.1f;
+			auto normal2 = v2 + n2 * 0.1f;
+			auto normal3 = v3 + n3 * 0.1f;
+
 			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
 			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
 			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
 
 
-			//normal1.x = (normal1.x + 1) * half_width; normal1.y = (normal1.y + 1) * half_height;
-			//normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
-			//normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
+
+			normal1.x = (normal1.x + 1) * half_width; normal1.y = (normal1.y + 1) * half_height;
+			normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
+			normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
 
 			glm::vec3 fn1(v1.x, v1.y, v1.z);
 			glm::vec3 fn2(v2.x, v2.y, v2.z);
@@ -399,7 +400,7 @@ void Renderer::Render(const Scene& scene)
 			glm::vec3 end_point = midpoint + normal * 0.1f;
 
 			//midpoint.x = (midpoint.x + 1) * half_width; midpoint.y = (midpoint.y + 1) * half_height;
-			end_point.x = (end_point.x + 1) * half_width; end_point.y = (end_point.y + 1) * half_height;
+			//end_point.x = (end_point.x + 1) * half_width; end_point.y = (end_point.y + 1) * half_height;
 
 			if (!scene.fillTriangle && !scene.grey_scale && !scene.ambient)
 			{
@@ -411,9 +412,9 @@ void Renderer::Render(const Scene& scene)
 			if (scene.normals)
 			{
 			DrawLine(glm::vec2(midpoint.x, midpoint.y), glm::vec2(end_point.x, end_point.y), glm::vec3(1, 0, 0));
-			DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(normal1.x, normal1.y), glm::vec3(1, 0, 0));
-			DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(normal2.x, normal2.y), glm::vec3(1, 0, 0));
-			DrawLine(glm::vec2(v3.x, v3.y), glm::vec2(normal3.x, normal3.y), glm::vec3(1, 0, 0));
+			//DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(normal1.x, normal1.y), glm::vec3(1, 0, 0));
+			//DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(normal2.x, normal2.y), glm::vec3(1, 0, 0));
+			//DrawLine(glm::vec2(v3.x, v3.y), glm::vec2(normal3.x, normal3.y), glm::vec3(1, 0, 0));
 			}
 			
 
@@ -495,7 +496,7 @@ void Renderer::Render(const Scene& scene)
 
 			if (scene.ambient)
 			{
-				
+				//normal = (n1 + n2 + n3) / 3.0f;
 				glm::vec3 ambient = scene.light * 1.0f;
 				glm::vec3 lightDirection = glm::normalize(glm::vec3(scene.lightx, scene.lighty, scene.lightz) - midpoint);
 				float intensity = dot(lightDirection, normal);
@@ -503,7 +504,8 @@ void Renderer::Render(const Scene& scene)
 				glm::vec3 reflectDir = glm::reflect(-lightDirection, normal);
 				float spec = pow(max(dot(lightDirection, reflectDir), 0.0f), 32);
 				glm::vec3 specular = spec * glm::vec3(1,1,1);
-				glm::vec3 finalColor = ( specular) * mesh.color;
+				glm::vec3 finalColor = ( ambient + diffuse + specular) * mesh.color;
+				//cout << glm::to_string(normal) << endl;
 				//finalColor += mesh.color;
 				for (int y = minY; y <= maxY; y++) {
 					for (int x = minX; x <= maxX; x++) {

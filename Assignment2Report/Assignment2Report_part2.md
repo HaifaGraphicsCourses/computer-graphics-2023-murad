@@ -14,6 +14,10 @@ by this formula -> ambient = ligth color * intensity * model color
 ![Mesh Viewer 1_15_2023 2_02_14 AM](https://user-images.githubusercontent.com/115185916/212502432-b320c315-08b1-42a4-9e1a-c228868a9772.png)
 ![Mesh Viewer 1_15_2023 2_04_30 AM](https://user-images.githubusercontent.com/115185916/212502474-71099834-48fc-4697-bd73-5a9de708fa3b.png)
 
+## Implement the function that computes the reflection vector used for specular lighting. Show the direction of the light from the center of each face and the direction of the reflected light as short lines
+
+![Mesh Viewer 1_17_2023 12_37_36 AM](https://user-images.githubusercontent.com/115185916/212775658-2878e10c-f8a8-4184-a5de-e544eaf8f845.png)
+
 
 ## Compute the specular light with Phong shading and show a result.
 ![Mesh Viewer 1_15_2023 10_16_20 PM](https://user-images.githubusercontent.com/115185916/212564920-11edb54a-006d-4962-8b46-52528c8d1e61.png)

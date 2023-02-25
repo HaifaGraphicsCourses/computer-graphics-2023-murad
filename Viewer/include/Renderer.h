@@ -1,8 +1,14 @@
 #pragma once
 #include "Scene.h"
+#include "ShaderProgram.h"
+#include <vector>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
+#include <imgui/imgui.h>
+#include <memory>
+#include "Texture2D.h"
+
 class Renderer
 {
 public:
@@ -13,6 +19,10 @@ public:
 	void ClearColorBuffer(const glm::vec3& color);
 	int GetViewportWidth() const;
 	int GetViewportHeight() const;
+
+	void Render(const std::shared_ptr<Scene>& scene);
+	void LoadShaders();
+	void LoadTextures();
 
 	int viewport_width;
 	int viewport_height;
@@ -30,4 +40,7 @@ private:
 	
 	GLuint gl_screen_tex;
 	GLuint gl_screen_vtc;
+	ShaderProgram lightShader;
+	ShaderProgram colorShader;
+	Texture2D texture1;
 };

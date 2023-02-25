@@ -248,319 +248,338 @@ void Renderer::ClearColorBuffer(const glm::vec3& color)
 		}
 	}
 }
-
-void Renderer::Render(const Scene& scene)
+void Renderer::LoadShaders()
 {
-	// TODO: Replace this code with real scene rendering code
-	int half_width = viewport_width / 2;
-	int half_height = viewport_height / 2;
-	// draw circle
-	auto count = scene.GetModelCount();
-	auto proj = scene.GetCamera(0).GetProjectionTransformation();
-	auto view = scene.GetCamera(0).GetViewTransformation();
-
-
-	if (scene.axis)
-	{
-		glm::vec4 xm(viewport_width, 0, 1, 1);
-		glm::vec4 x(-viewport_width, 0, 1, 1);
-		glm::vec4 ym(0, viewport_height, 1, 1);
-		glm::vec4 y(0, -viewport_height, 1, 1);
-
-		xm = proj * view * xm;
-		x = proj * view * x;
-		ym = proj * view * ym;
-		y = proj * view * y;
-
-		xm.x = (xm.x + 1) * half_width; xm.y = (xm.y + 1) * half_height;
-		x.x = (x.x + 1) * half_width; x.y = (x.y + 1) * half_height;
-		ym.x = (ym.x + 1) * half_width; ym.y = (ym.y + 1) * half_height;
-		y.x = (y.x + 1) * half_width; y.y = (y.y + 1) * half_height;
-
-		DrawLine(glm::vec2(xm.x, xm.y), glm::vec2(x.x, x.y), glm::vec3(1, 0, 0));
-		DrawLine(glm::vec2(ym.x, ym.y), glm::vec2(y.x, y.y), glm::vec3(1, 0, 0));
-	}
-
-	for (int active = 0; active < count; active++)
-	{
-		auto mesh = scene.GetModel(active);
-		auto faceCount = mesh.GetFacesCount();
-		mesh.screen = viewport_height;
-
-		glm::mat4 modelMatrix = mesh.GetTransformation();
-		glm::mat4 world = mesh.GetWorld();
-
-		float maxX = 0; float minX = 0;
-		float maxY = 0; float minY = 0;
-
-		for (int i = 0; i < faceCount; i++)
-		{
-			auto face = mesh.GetFace(i);
-			auto v1 = mesh.GetVertex((face.GetVertexIndex(0) - 1));
-			auto v2 = mesh.GetVertex((face.GetVertexIndex(1) - 1));
-			auto v3 = mesh.GetVertex((face.GetVertexIndex(2) - 1));
-
-			auto n1 = mesh.getNormal((face.GetNormalIndex(0) - 1));
-			auto n2 = mesh.getNormal((face.GetNormalIndex(1) - 1));
-			auto n3 = mesh.getNormal((face.GetNormalIndex(2) - 1));
-
-			float maxy = mesh.getMax();
-			float s = 300 / maxy;
-			v1.x *= s;
-			v1.y *= s;
-			v2.x *= s;
-			v2.y *= s;
-			v3.x *= s;
-			v3.y *= s;
-
-			float maxv = mesh.getMin();
-			int z1 = (v1.z / maxv + 1) * 10;
-			int z2 = (v2.z / maxv + 1) * 10;
-			int z3 = (v3.z / maxv + 1) * 10;
-
-			glm::vec3 color;
-
-			int depth = (z1 + z2 + z3) / 3;
-			if (depth == 0)
-				color = glm::vec3(0, 0.5, 0);
-			if (depth == 1)
-				color = glm::vec3(1, 0, 0);
-			if (depth == 2)
-				color = glm::vec3(0, 1, 0);
-			if (depth == 3)
-				color = glm::vec3(1, 1, 0);
-			if (depth == 4)
-				color = glm::vec3(0, 0, 1);
-			if (depth == 5)
-				color = glm::vec3(1, 0, 1);
-			if (depth == 6)
-				color = glm::vec3(0, 1, 1);
-			if (depth == 7)
-				color = glm::vec3(1, 1, 1);
-			if (depth == 8)
-				color = glm::vec3(1, 0.5, 0);
-			if (depth == 9)
-				color = glm::vec3(1, 0, 0.5);
-			if (depth == 10)
-				color = glm::vec3(1, 0.5, 0.5);
-			if (depth == 11)
-				color = glm::vec3(0.5, 0, 0);
-			if (depth == 12)
-				color = glm::vec3(0.5, 0.5, 0.5);
-			if (depth == 13)
-				color = glm::vec3(0, 0.5, 0);
-			if (depth == 14)
-				color = glm::vec3(0, 0, 0.5);
-			if (depth == 15)
-				color = glm::vec3(0.5, 0, 0.5);
-			if (depth == 16)
-				color = glm::vec3(0, 1, 0.5);
-			if (depth == 17)
-				color = glm::vec3(1, 1, 0.5);
-			if (depth == 18)
-				color = glm::vec3(1, 0, 0.5);
-			if (depth == 19)
-				color = glm::vec3(0.5, 0.5, 1);
-			if (depth == 20)
-				color = glm::vec3(0.5, 0, 1);
-
-			//cout << depth << endl;
-
-			v1 = proj * view * world * modelMatrix * v1;
-			v2 = proj * view * world * modelMatrix * v2;
-			v3 = proj * view * world * modelMatrix * v3;
-
-			auto normal1 = v1 + n1 * 0.1f;
-			auto normal2 = v2 + n2 * 0.1f;
-			auto normal3 = v3 + n3 * 0.1f;
-
-			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
-			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
-			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
-
-
-
-			normal1.x = (normal1.x + 1) * half_width; normal1.y = (normal1.y + 1) * half_height;
-			normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
-			normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
-
-			glm::vec3 fn1(v1.x, v1.y, v1.z);
-			glm::vec3 fn2(v2.x, v2.y, v2.z);
-			glm::vec3 fn3(v3.x, v3.y, v3.z);
-
-			// Compute the face normal
-			glm::vec3 edge1 = fn2 - fn1;
-			glm::vec3 edge2 = fn3 - fn1;
-			glm::vec3 normal = glm::normalize(glm::cross(edge2, edge1));
-
-			// Compute the midpoint of the face
-			glm::vec3 midpoint = (fn1 + fn2 + fn3) / 3.0f;
-
-			// Compute the end point of the normal
-			glm::vec3 end_point = midpoint + normal * 0.1f;
-
-			//midpoint.x = (midpoint.x + 1) * half_width; midpoint.y = (midpoint.y + 1) * half_height;
-			//end_point.x = (end_point.x + 1) * half_width; end_point.y = (end_point.y + 1) * half_height;
-
-			if (!scene.fillTriangle && !scene.grey_scale && !scene.ambient)
-			{
-				DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v2.x, v2.y), glm::vec3(0, 0, 0));
-				DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
-				DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
-			}
-
-			if (scene.normals)
-			{
-			DrawLine(glm::vec2(midpoint.x, midpoint.y), glm::vec2(end_point.x, end_point.y), glm::vec3(1, 0, 0));
-			//DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(normal1.x, normal1.y), glm::vec3(1, 0, 0));
-			//DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(normal2.x, normal2.y), glm::vec3(1, 0, 0));
-			//DrawLine(glm::vec2(v3.x, v3.y), glm::vec2(normal3.x, normal3.y), glm::vec3(1, 0, 0));
-			}
-			
-
-				maxX = max(max(v3.x, v2.x), v1.x);
-				minX = min(min(v3.x, v2.x), v1.x);
-				maxY = max(max(v3.y, v2.y), v1.y);
-				minY = min(min(v3.y, v2.y), v1.y);
-
-			if (scene.bounding)
-			{
-				DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), color);
-				DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), color);
-				DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), color);
-				DrawLine(glm::vec2(minX, minY), glm::vec2(maxX, minY), color);
-			}
-
-			if (scene.fillTriangle)
-			{
-				for (int y = minY; y <= maxY; y++) {
-					for (int x = minX; x <= maxX; x++) {
-						// Compute the barycentric coordinates of the pixel
-						glm::vec4 p(x, y, 0, 0);
-						float u, v, w;
-						glm::vec4 v2v1 = v2 - v1;
-						glm::vec4 v3v1 = v3 - v1;
-						glm::vec4 pv1 = p - v1;
-						float d00 = dot(v2v1, v2v1);
-						float d01 = dot(v2v1, v3v1);
-						float d11 = dot(v3v1, v3v1);
-						float d20 = dot(pv1, v2v1);
-						float d21 = dot(pv1, v3v1);
-						float denom = d00 * d11 - d01 * d01;
-						v = (d11 * d20 - d01 * d21) / denom;
-						w = (d00 * d21 - d01 * d20) / denom;
-						u = 1.0f - v - w;
-
-						// Check if the pixel is inside the triangle
-						if (u >= 0 && v >= 0 && w >= 0) {
-							// Mark the pixel as inside
-							PutPixel(x, y, mesh.color);
-						}
-					}
-				}
-			}
-
-			if (scene.grey_scale)
-			{
-				for (int y = minY; y <= maxY; y++) {
-					for (int x = minX; x <= maxX; x++) {
-						// Compute the barycentric coordinates of the pixel
-						glm::vec4 p(x, y, 0, 0);
-						float u, v, w;
-						glm::vec4 v2v1 = v2 - v1;
-						glm::vec4 v3v1 = v3 - v1;
-						glm::vec4 pv1 = p - v1;
-						float d00 = dot(v2v1, v2v1);
-						float d01 = dot(v2v1, v3v1);
-						float d11 = dot(v3v1, v3v1);
-						float d20 = dot(pv1, v2v1);
-						float d21 = dot(pv1, v3v1);
-						float denom = d00 * d11 - d01 * d01;
-						v = (d11 * d20 - d01 * d21) / denom;
-						w = (d00 * d21 - d01 * d20) / denom;
-						u = 1.0f - v - w;
-
-						// Check if the pixel is inside the triangle
-						if (u >= 0 && v >= 0 && w >= 0) {
-							// Mark the pixel as inside
-							float depth2 = depth / 10.0;
-							z_buffer[Z_INDEX(viewport_width, x, y)] = min(depth2, z_buffer[Z_INDEX(viewport_width, x, y)]);
-							float alpha = z_buffer[Z_INDEX(viewport_width, x, y)];
-							alpha = 1 - alpha;
-							color = glm::vec3(alpha, alpha, alpha);
-							PutPixel(x, y, color);
-						}
-					}
-				}
-			}
-
-			if (scene.ambient)
-			{
-				//normal = (n1 + n2 + n3) / 3.0f;
-				glm::vec3 ambient = scene.light * 1.0f;
-				glm::vec3 lightDirection = glm::normalize(glm::vec3(scene.lightx, scene.lighty, scene.lightz) - midpoint);
-				float intensity = dot(lightDirection, normal);
-				glm::vec3 diffuse = glm::vec3(1,1,1) * max(intensity, 0.0f);
-				glm::vec3 reflectDir = glm::reflect(-lightDirection, normal);
-				float spec = pow(max(dot(lightDirection, reflectDir), 0.0f), 32);
-				glm::vec3 specular = spec * glm::vec3(1,1,1);
-				glm::vec3 finalColor = ( ambient + diffuse + specular) * mesh.color;
-				//cout << glm::to_string(normal) << endl;
-				//finalColor += mesh.color;
-				for (int y = minY; y <= maxY; y++) {
-					for (int x = minX; x <= maxX; x++) {
-						// Compute the barycentric coordinates of the pixel
-						glm::vec4 p(x, y, 0, 0);
-						float u, v, w;
-						glm::vec4 v2v1 = v2 - v1;
-						glm::vec4 v3v1 = v3 - v1;
-						glm::vec4 pv1 = p - v1;
-						float d00 = dot(v2v1, v2v1);
-						float d01 = dot(v2v1, v3v1);
-						float d11 = dot(v3v1, v3v1);
-						float d20 = dot(pv1, v2v1);
-						float d21 = dot(pv1, v3v1);
-						float denom = d00 * d11 - d01 * d01;
-						v = (d11 * d20 - d01 * d21) / denom;
-						w = (d00 * d21 - d01 * d20) / denom;
-						u = 1.0f - v - w;
-
-						// Check if the pixel is inside the triangle
-						if (u >= 0 && v >= 0 && w >= 0) {
-							// Mark the pixel as inside
-							/*float depth2 = depth / 10.0;
-							z_buffer[Z_INDEX(viewport_width, x, y)] = min(depth2, z_buffer[Z_INDEX(viewport_width, x, y)]);*/
-							PutPixel(x, y, finalColor);
-						}
-					}
-				}
-			}
-
-	}
-
-		if (scene.axis)
-		{
-			glm::vec4 xm(viewport_width, 0, 1, 1);
-			glm::vec4 x(-viewport_width, 0, 1, 1);
-			glm::vec4 ym(0, viewport_height, 1, 1);
-			glm::vec4 y(0, -viewport_height, 1, 1);
-			xm = proj * view * world * xm;
-			x = proj * view * world * x;
-			ym = proj * view * world * ym;
-			y = proj * view * world * y;
-			xm.x = (xm.x + 1) * half_width; xm.y = (xm.y + 1) * half_height;
-			x.x = (x.x + 1) * half_width; x.y = (x.y + 1) * half_height;
-			ym.x = (ym.x + 1) * half_width; ym.y = (ym.y + 1) * half_height;
-			y.x = (y.x + 1) * half_width; y.y = (y.y + 1) * half_height;
-			cout << glm::to_string(xm) << endl;
-			cout << glm::to_string(x) << endl;
-			DrawLine(glm::vec2(xm.x, xm.y), glm::vec2(x.x, x.y), glm::vec3(0, 0, 1));
-			DrawLine(glm::vec2(ym.x, ym.y), glm::vec2(y.x, y.y), glm::vec3(0, 0, 1));
-		}
-
-	}
+	colorShader.loadShaders("vshader.glsl", "fshader.glsl");
 }
 
+//void Renderer::Render(const Scene& scene)
+//{
+//	// TODO: Replace this code with real scene rendering code
+//	int half_width = viewport_width / 2;
+//	int half_height = viewport_height / 2;
+//	// draw circle
+//	auto count = scene.GetModelCount();
+//	auto proj = scene.GetCamera(0).GetProjectionTransformation();
+//	auto view = scene.GetCamera(0).GetViewTransformation();
+//
+//
+//	if (scene.axis)
+//	{
+//		glm::vec4 xm(viewport_width, 0, 1, 1);
+//		glm::vec4 x(-viewport_width, 0, 1, 1);
+//		glm::vec4 ym(0, viewport_height, 1, 1);
+//		glm::vec4 y(0, -viewport_height, 1, 1);
+//
+//		xm = proj * view * xm;
+//		x = proj * view * x;
+//		ym = proj * view * ym;
+//		y = proj * view * y;
+//
+//		xm.x = (xm.x + 1) * half_width; xm.y = (xm.y + 1) * half_height;
+//		x.x = (x.x + 1) * half_width; x.y = (x.y + 1) * half_height;
+//		ym.x = (ym.x + 1) * half_width; ym.y = (ym.y + 1) * half_height;
+//		y.x = (y.x + 1) * half_width; y.y = (y.y + 1) * half_height;
+//
+//		DrawLine(glm::vec2(xm.x, xm.y), glm::vec2(x.x, x.y), glm::vec3(1, 0, 0));
+//		DrawLine(glm::vec2(ym.x, ym.y), glm::vec2(y.x, y.y), glm::vec3(1, 0, 0));
+//	}
+//
+//	for (int active = 0; active < count; active++)
+//	{
+//		auto mesh = scene.GetModel(active);
+//		auto faceCount = mesh.GetFacesCount();
+//		mesh.screen = viewport_height;
+//
+//		glm::mat4 modelMatrix = mesh.GetTransformation();
+//		glm::mat4 world = mesh.GetWorld();
+//
+//		float maxX = 0; float minX = 0;
+//		float maxY = 0; float minY = 0;
+//
+//		for (int i = 0; i < faceCount; i++)
+//		{
+//			auto face = mesh.GetFace(i);
+//			auto v1 = mesh.GetVertex((face.GetVertexIndex(0) - 1));
+//			auto v2 = mesh.GetVertex((face.GetVertexIndex(1) - 1));
+//			auto v3 = mesh.GetVertex((face.GetVertexIndex(2) - 1));
+//
+//			auto n1 = mesh.getNormal((face.GetNormalIndex(0) - 1));
+//			auto n2 = mesh.getNormal((face.GetNormalIndex(1) - 1));
+//			auto n3 = mesh.getNormal((face.GetNormalIndex(2) - 1));
+//
+//			float maxy = mesh.getMax();
+//			float s = 300 / maxy;
+//			v1.x *= s;
+//			v1.y *= s;
+//			v2.x *= s;
+//			v2.y *= s;
+//			v3.x *= s;
+//			v3.y *= s;
+//
+//			float maxv = mesh.getMin();
+//			int z1 = (v1.z / maxv + 1) * 10;
+//			int z2 = (v2.z / maxv + 1) * 10;
+//			int z3 = (v3.z / maxv + 1) * 10;
+//
+//			glm::vec3 color;
+//
+//			int depth = (z1 + z2 + z3) / 3;
+//			if (depth == 0)
+//				color = glm::vec3(0, 0.5, 0);
+//			if (depth == 1)
+//				color = glm::vec3(1, 0, 0);
+//			if (depth == 2)
+//				color = glm::vec3(0, 1, 0);
+//			if (depth == 3)
+//				color = glm::vec3(1, 1, 0);
+//			if (depth == 4)
+//				color = glm::vec3(0, 0, 1);
+//			if (depth == 5)
+//				color = glm::vec3(1, 0, 1);
+//			if (depth == 6)
+//				color = glm::vec3(0, 1, 1);
+//			if (depth == 7)
+//				color = glm::vec3(1, 1, 1);
+//			if (depth == 8)
+//				color = glm::vec3(1, 0.5, 0);
+//			if (depth == 9)
+//				color = glm::vec3(1, 0, 0.5);
+//			if (depth == 10)
+//				color = glm::vec3(1, 0.5, 0.5);
+//			if (depth == 11)
+//				color = glm::vec3(0.5, 0, 0);
+//			if (depth == 12)
+//				color = glm::vec3(0.5, 0.5, 0.5);
+//			if (depth == 13)
+//				color = glm::vec3(0, 0.5, 0);
+//			if (depth == 14)
+//				color = glm::vec3(0, 0, 0.5);
+//			if (depth == 15)
+//				color = glm::vec3(0.5, 0, 0.5);
+//			if (depth == 16)
+//				color = glm::vec3(0, 1, 0.5);
+//			if (depth == 17)
+//				color = glm::vec3(1, 1, 0.5);
+//			if (depth == 18)
+//				color = glm::vec3(1, 0, 0.5);
+//			if (depth == 19)
+//				color = glm::vec3(0.5, 0.5, 1);
+//			if (depth == 20)
+//				color = glm::vec3(0.5, 0, 1);
+//
+//			//cout << depth << endl;
+//
+//			v1 = proj * view * world * modelMatrix * v1;
+//			v2 = proj * view * world * modelMatrix * v2;
+//			v3 = proj * view * world * modelMatrix * v3;
+//
+//			auto normal1 = v1 + n1 * 0.1f;
+//			auto normal2 = v2 + n2 * 0.1f;
+//			auto normal3 = v3 + n3 * 0.1f;
+//
+//			v1.x = (v1.x + 1) * half_width; v1.y = (v1.y + 1) * half_height;
+//			v2.x = (v2.x + 1) * half_width; v2.y = (v2.y + 1) * half_height;
+//			v3.x = (v3.x + 1) * half_width; v3.y = (v3.y + 1) * half_height;
+//
+//
+//
+//			normal1.x = (normal1.x + 1) * half_width; normal1.y = (normal1.y + 1) * half_height;
+//			normal2.x = (normal2.x + 1) * half_width; normal2.y = (normal2.y + 1) * half_height;
+//			normal3.x = (normal3.x + 1) * half_width; normal3.y = (normal3.y + 1) * half_height;
+//
+//			glm::vec3 fn1(v1.x, v1.y, v1.z);
+//			glm::vec3 fn2(v2.x, v2.y, v2.z);
+//			glm::vec3 fn3(v3.x, v3.y, v3.z);
+//
+//			// Compute the face normal
+//			glm::vec3 edge1 = fn2 - fn1;
+//			glm::vec3 edge2 = fn3 - fn1;
+//			glm::vec3 normal = glm::normalize(glm::cross(edge2, edge1));
+//
+//			// Compute the midpoint of the face
+//			glm::vec3 midpoint = (fn1 + fn2 + fn3) / 3.0f;
+//
+//			// Compute the end point of the normal
+//			glm::vec3 end_point = midpoint + normal * 0.1f;
+//
+//			//midpoint.x = (midpoint.x + 1) * half_width; midpoint.y = (midpoint.y + 1) * half_height;
+//			//end_point.x = (end_point.x + 1) * half_width; end_point.y = (end_point.y + 1) * half_height;
+//
+//			if (!scene.fillTriangle && !scene.grey_scale && !scene.ambient)
+//			{
+//				DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v2.x, v2.y), glm::vec3(0, 0, 0));
+//				DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
+//				DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(v3.x, v3.y), glm::vec3(0, 0, 0));
+//			}
+//
+//			if (scene.normals)
+//			{
+//			DrawLine(glm::vec2(midpoint.x, midpoint.y), glm::vec2(end_point.x, end_point.y), glm::vec3(1, 0, 0));
+//			//DrawLine(glm::vec2(v1.x, v1.y), glm::vec2(normal1.x, normal1.y), glm::vec3(1, 0, 0));
+//			//DrawLine(glm::vec2(v2.x, v2.y), glm::vec2(normal2.x, normal2.y), glm::vec3(1, 0, 0));
+//			//DrawLine(glm::vec2(v3.x, v3.y), glm::vec2(normal3.x, normal3.y), glm::vec3(1, 0, 0));
+//			}
+//			
+//
+//				maxX = max(max(v3.x, v2.x), v1.x);
+//				minX = min(min(v3.x, v2.x), v1.x);
+//				maxY = max(max(v3.y, v2.y), v1.y);
+//				minY = min(min(v3.y, v2.y), v1.y);
+//
+//			if (scene.bounding)
+//			{
+//				DrawLine(glm::vec2(minX, maxY), glm::vec2(maxX, maxY), color);
+//				DrawLine(glm::vec2(minX, maxY), glm::vec2(minX, minY), color);
+//				DrawLine(glm::vec2(maxX, maxY), glm::vec2(maxX, minY), color);
+//				DrawLine(glm::vec2(minX, minY), glm::vec2(maxX, minY), color);
+//			}
+//
+//			if (scene.fillTriangle)
+//			{
+//				for (int y = minY; y <= maxY; y++) {
+//					for (int x = minX; x <= maxX; x++) {
+//						// Compute the barycentric coordinates of the pixel
+//						glm::vec4 p(x, y, 0, 0);
+//						float u, v, w;
+//						glm::vec4 v2v1 = v2 - v1;
+//						glm::vec4 v3v1 = v3 - v1;
+//						glm::vec4 pv1 = p - v1;
+//						float d00 = dot(v2v1, v2v1);
+//						float d01 = dot(v2v1, v3v1);
+//						float d11 = dot(v3v1, v3v1);
+//						float d20 = dot(pv1, v2v1);
+//						float d21 = dot(pv1, v3v1);
+//						float denom = d00 * d11 - d01 * d01;
+//						v = (d11 * d20 - d01 * d21) / denom;
+//						w = (d00 * d21 - d01 * d20) / denom;
+//						u = 1.0f - v - w;
+//
+//						// Check if the pixel is inside the triangle
+//						if (u >= 0 && v >= 0 && w >= 0) {
+//							// Mark the pixel as inside
+//							PutPixel(x, y, mesh.color);
+//						}
+//					}
+//				}
+//			}
+//
+//			if (scene.grey_scale)
+//			{
+//				for (int y = minY; y <= maxY; y++) {
+//					for (int x = minX; x <= maxX; x++) {
+//						// Compute the barycentric coordinates of the pixel
+//						glm::vec4 p(x, y, 0, 0);
+//						float u, v, w;
+//						glm::vec4 v2v1 = v2 - v1;
+//						glm::vec4 v3v1 = v3 - v1;
+//						glm::vec4 pv1 = p - v1;
+//						float d00 = dot(v2v1, v2v1);
+//						float d01 = dot(v2v1, v3v1);
+//						float d11 = dot(v3v1, v3v1);
+//						float d20 = dot(pv1, v2v1);
+//						float d21 = dot(pv1, v3v1);
+//						float denom = d00 * d11 - d01 * d01;
+//						v = (d11 * d20 - d01 * d21) / denom;
+//						w = (d00 * d21 - d01 * d20) / denom;
+//						u = 1.0f - v - w;
+//
+//						// Check if the pixel is inside the triangle
+//						if (u >= 0 && v >= 0 && w >= 0) {
+//							// Mark the pixel as inside
+//							float depth2 = depth / 10.0;
+//							z_buffer[Z_INDEX(viewport_width, x, y)] = min(depth2, z_buffer[Z_INDEX(viewport_width, x, y)]);
+//							float alpha = z_buffer[Z_INDEX(viewport_width, x, y)];
+//							alpha = 1 - alpha;
+//							color = glm::vec3(alpha, alpha, alpha);
+//							PutPixel(x, y, color);
+//						}
+//					}
+//				}
+//			}
+//
+//			if (scene.ambient)
+//			{
+//				//normal = (n1 + n2 + n3) / 3.0f;
+//				glm::vec3 ambient = scene.light * 1.0f;
+//				glm::vec3 lightDirection = glm::normalize(glm::vec3(scene.lightx, scene.lighty, scene.lightz) - midpoint);
+//				float intensity = dot(lightDirection, normal);
+//				glm::vec3 diffuse = glm::vec3(1,1,1) * max(intensity, 0.0f);
+//				glm::vec3 reflectDir = glm::reflect(-lightDirection, normal);
+//				float spec = pow(max(dot(lightDirection, reflectDir), 0.0f), 32);
+//				glm::vec3 specular = spec * glm::vec3(1,1,1);
+//				glm::vec3 finalColor = ( ambient + diffuse + specular) * mesh.color;
+//				//cout << glm::to_string(normal) << endl;
+//				//finalColor += mesh.color;
+//				for (int y = minY; y <= maxY; y++) {
+//					for (int x = minX; x <= maxX; x++) {
+//						// Compute the barycentric coordinates of the pixel
+//						glm::vec4 p(x, y, 0, 0);
+//						float u, v, w;
+//						glm::vec4 v2v1 = v2 - v1;
+//						glm::vec4 v3v1 = v3 - v1;
+//						glm::vec4 pv1 = p - v1;
+//						float d00 = dot(v2v1, v2v1);
+//						float d01 = dot(v2v1, v3v1);
+//						float d11 = dot(v3v1, v3v1);
+//						float d20 = dot(pv1, v2v1);
+//						float d21 = dot(pv1, v3v1);
+//						float denom = d00 * d11 - d01 * d01;
+//						v = (d11 * d20 - d01 * d21) / denom;
+//						w = (d00 * d21 - d01 * d20) / denom;
+//						u = 1.0f - v - w;
+//
+//						// Check if the pixel is inside the triangle
+//						if (u >= 0 && v >= 0 && w >= 0) {
+//							// Mark the pixel as inside
+//							/*float depth2 = depth / 10.0;
+//							z_buffer[Z_INDEX(viewport_width, x, y)] = min(depth2, z_buffer[Z_INDEX(viewport_width, x, y)]);*/
+//							PutPixel(x, y, finalColor);
+//						}
+//					}
+//				}
+//			}
+//
+//	}
+//
+//		if (scene.axis)
+//		{
+//			glm::vec4 xm(viewport_width, 0, 1, 1);
+//			glm::vec4 x(-viewport_width, 0, 1, 1);
+//			glm::vec4 ym(0, viewport_height, 1, 1);
+//			glm::vec4 y(0, -viewport_height, 1, 1);
+//			xm = proj * view * world * xm;
+//			x = proj * view * world * x;
+//			ym = proj * view * world * ym;
+//			y = proj * view * world * y;
+//			xm.x = (xm.x + 1) * half_width; xm.y = (xm.y + 1) * half_height;
+//			x.x = (x.x + 1) * half_width; x.y = (x.y + 1) * half_height;
+//			ym.x = (ym.x + 1) * half_width; ym.y = (ym.y + 1) * half_height;
+//			y.x = (y.x + 1) * half_width; y.y = (y.y + 1) * half_height;
+//			cout << glm::to_string(xm) << endl;
+//			cout << glm::to_string(x) << endl;
+//			DrawLine(glm::vec2(xm.x, xm.y), glm::vec2(x.x, x.y), glm::vec3(0, 0, 1));
+//			DrawLine(glm::vec2(ym.x, ym.y), glm::vec2(y.x, y.y), glm::vec3(0, 0, 1));
+//		}
+//
+//	}
+//}
+
+void Renderer::Render(const std::shared_ptr<Scene>& scene)
+{
+
+	int cameraCount = scene->GetCameraCount();
+	if (cameraCount > 0)
+	{
+		const Camera& camera = scene->GetActiveCamera();
+		for (int currentModelIndex = 0; currentModelIndex < scene->GetModelCount(); currentModelIndex++)
+		{
+			const MeshModel& mesh = scene->GetModel(currentModelIndex);
+
+
+		}
+	}
+}
 
 int Renderer::GetViewportWidth() const
 {

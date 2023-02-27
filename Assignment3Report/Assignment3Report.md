@@ -96,3 +96,10 @@ Load and compile a vertex and fragment shader program using InitShader and make 
  ## Implement Phong shading in the fragment shader.
  ![image](https://user-images.githubusercontent.com/116717525/221672729-5f4a1fdd-c445-4462-8044-9ef5c8537a6c.png)
 ![image](https://user-images.githubusercontent.com/116717525/221672812-e65e38cf-3e09-4c2b-acd9-5f8f5078d935.png)
+ 
+ ## Implement texture mapping..
+ *Sphere*
+ ![image](https://user-images.githubusercontent.com/116717525/221689854-a40a026d-f701-49c2-acb8-c08075584384.png)
+ ![image](https://user-images.githubusercontent.com/116717525/221689965-d9088c5a-6c0e-4000-ba5d-d30a8fa0b20d.png)
+
+

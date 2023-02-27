@@ -201,7 +201,7 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 
 
 	renderer.ClearColorBuffer(clear_color);
-	renderer.Render(scene);
+	renderer.Render(std::make_shared<Scene>(scene));
 	renderer.SwapBuffers();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -365,159 +365,159 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	}
 
 
-	if (orthoProjectionControl == 1)
-	{
-		static float n = 0.01f;
-		static float f = 100.0f;
-		ImGui::Begin("orho projection control");
-		ImGui::SliderFloat("left", &scene.GetCamera(0).left, -windowWidth*4, windowWidth*2);
-		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
-		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
-		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
-		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
-		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
-		if (ImGui::Button("Close Me"))
-			orthoProjectionControl = false;
-		ImGui::End();
-	}
+	//if (orthoProjectionControl == 1)
+	//{
+	//	static float n = 0.01f;
+	//	static float f = 100.0f;
+	//	ImGui::Begin("orho projection control");
+	//	ImGui::SliderFloat("left", &scene.GetCamera(0).left, -windowWidth*4, windowWidth*2);
+	//	ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
+	//	ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
+	//	ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
+	//	ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
+	//	ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 0.0f, 100.0f);
+	//	if (ImGui::Button("Close Me"))
+	//		orthoProjectionControl = false;
+	//	ImGui::End();
+	//}
 
-	if (dolly == 1)
-	{
-		static float f = 0.0f;
-		ImGui::Begin("orho projection control");
-		ImGui::SliderFloat("left", &f, 0, 1.0f);
-		scene.GetCamera(0).down = -windowHeight - 1000 *f;
-		scene.GetCamera(0).up = windowHeight + 1000 *f;
-		scene.GetCamera(0).left = -windowWidth - 1000 *f;
-		scene.GetCamera(0).right = windowWidth + 1000 *f;
-		scene.GetCamera(0).near2 = 1.0f + f;
+	//if (dolly == 1)
+	//{
+	//	static float f = 0.0f;
+	//	ImGui::Begin("orho projection control");
+	//	ImGui::SliderFloat("left", &f, 0, 1.0f);
+	//	scene.GetCamera(0).down = -windowHeight - 1000 *f;
+	//	scene.GetCamera(0).up = windowHeight + 1000 *f;
+	//	scene.GetCamera(0).left = -windowWidth - 1000 *f;
+	//	scene.GetCamera(0).right = windowWidth + 1000 *f;
+	//	scene.GetCamera(0).near2 = 1.0f + f;
 
-		if (ImGui::Button("Close Me"))
-			dolly = false;
-		ImGui::End();
-	} 
+	//	if (ImGui::Button("Close Me"))
+	//		dolly = false;
+	//	ImGui::End();
+	//} 
 
-	if (PerspictiveProjectionControl == 1)
-	{
-		static float n = 0.01f;
-		static float f = 100.0f;
-		ImGui::Begin("Perspictive projection control");
-		ImGui::SliderFloat("left", &scene.GetCamera(0).left, -windowWidth * 4, windowWidth * 2);
-		ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
-		ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
-		ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
-		ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
-		ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 5.0f, 100.0f);
-		if (ImGui::Button("Close Me"))
-			PerspictiveProjectionControl = false;
-		ImGui::End();
-	}
+	//if (PerspictiveProjectionControl == 1)
+	//{
+	//	static float n = 0.01f;
+	//	static float f = 100.0f;
+	//	ImGui::Begin("Perspictive projection control");
+	//	ImGui::SliderFloat("left", &scene.GetCamera(0).left, -windowWidth * 4, windowWidth * 2);
+	//	ImGui::SliderFloat("right", &scene.GetCamera(0).right, -windowWidth * 2, windowWidth * 4);
+	//	ImGui::SliderFloat("down", &scene.GetCamera(0).down, -windowHeight * 4, windowHeight * 2);
+	//	ImGui::SliderFloat("up", &scene.GetCamera(0).up, -windowHeight * 2, windowHeight * 4);
+	//	ImGui::SliderFloat("near", &scene.GetCamera(0).near2, 0.5f, 7.0f);
+	//	ImGui::SliderFloat("far", &scene.GetCamera(0).far2, 5.0f, 100.0f);
+	//	if (ImGui::Button("Close Me"))
+	//		PerspictiveProjectionControl = false;
+	//	ImGui::End();
+	//}
 
-	if (localcam)
-	{
-		ImGui::Begin("Local camera transformations");
-		static float f = 1.0f;
-		ImGui::SliderFloat("X", &scene.GetCamera(0).translatex, -680, 680);
-		ImGui::SliderFloat("Y", &scene.GetCamera(0).translatey, -340, 340);
-		ImGui::SliderFloat("Z", &scene.GetCamera(0).translatez, -340, 340);
-		ImGui::SliderFloat("rotate", &scene.GetCamera(0).rotate, -360.0f, 360.0f);
-		if (ImGui::Button("Close Me"))
-			localcam = false;
-		ImGui::End();
-	}
+	//if (localcam)
+	//{
+	//	ImGui::Begin("Local camera transformations");
+	//	static float f = 1.0f;
+	//	ImGui::SliderFloat("X", &scene.GetCamera(0).translatex, -680, 680);
+	//	ImGui::SliderFloat("Y", &scene.GetCamera(0).translatey, -340, 340);
+	//	ImGui::SliderFloat("Z", &scene.GetCamera(0).translatez, -340, 340);
+	//	ImGui::SliderFloat("rotate", &scene.GetCamera(0).rotate, -360.0f, 360.0f);
+	//	if (ImGui::Button("Close Me"))
+	//		localcam = false;
+	//	ImGui::End();
+	//}
 
-	if (worldcam)
-	{
-		ImGui::Begin("Lworld camera transformations");
-		static float f = 1.0f;
-		ImGui::SliderFloat("X", &scene.GetCamera(0).Wtranslatex, -680, 680);
-		ImGui::SliderFloat("Y", &scene.GetCamera(0).Wtranslatey, -340, 340);
-		ImGui::SliderFloat("Z", &scene.GetCamera(0).Wtranslatez, -340, 340);
-		ImGui::SliderFloat("rotate", &scene.GetCamera(0).Wrotate, -360.0f, 360.0f);
-		if (ImGui::Button("Close Me"))
-			worldcam = false;
-		ImGui::End();
-	}
+	//if (worldcam)
+	//{
+	//	ImGui::Begin("Lworld camera transformations");
+	//	static float f = 1.0f;
+	//	ImGui::SliderFloat("X", &scene.GetCamera(0).Wtranslatex, -680, 680);
+	//	ImGui::SliderFloat("Y", &scene.GetCamera(0).Wtranslatey, -340, 340);
+	//	ImGui::SliderFloat("Z", &scene.GetCamera(0).Wtranslatez, -340, 340);
+	//	ImGui::SliderFloat("rotate", &scene.GetCamera(0).Wrotate, -360.0f, 360.0f);
+	//	if (ImGui::Button("Close Me"))
+	//		worldcam = false;
+	//	ImGui::End();
+	//}
 
-	if(local == 1)
-	{
-		static float f = 1.0f;
+	//if(local == 1)
+	//{
+	//	static float f = 1.0f;
 
-		ImGui::Begin("Local transformations");
-		static int e = 0;
-		ImGui::RadioButton("scale", &e, 0); ImGui::SameLine();
-		ImGui::RadioButton("translate", &e, 1); ImGui::SameLine();
-		ImGui::RadioButton("rotate", &e, 2);
-		
-		if (e == 0)
-		{
-			if (scene.GetModelCount() > 0)
-			{
-				ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).scalex, 0, 2.0f);
-				ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).scaley, 0, 2.0f);
-				ImGui::SliderFloat("Z", &f, 0, 2.0f);
-			}
-		}
-		if (e == 1)
-		{
-			if (scene.GetModelCount() > 0)
-			{
-				ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).translatex, -680, 680);
-				ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).translatey, -340, 340);
-				ImGui::SliderFloat("Z", &f, -340, 340);
-			}
-		}
-		if (e == 2)
-		{
-			if (scene.GetModelCount() > 0)
-			{
-				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
-				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).rotate, -360.0f, 360.0f);
-			}
-		}
-		if (ImGui::Button("Close Me"))
-			local = false;
-		ImGui::End();
-	}
+	//	ImGui::Begin("Local transformations");
+	//	static int e = 0;
+	//	ImGui::RadioButton("scale", &e, 0); ImGui::SameLine();
+	//	ImGui::RadioButton("translate", &e, 1); ImGui::SameLine();
+	//	ImGui::RadioButton("rotate", &e, 2);
+	//	
+	//	if (e == 0)
+	//	{
+	//		if (scene.GetModelCount() > 0)
+	//		{
+	//			ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).scalex, 0, 2.0f);
+	//			ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).scaley, 0, 2.0f);
+	//			ImGui::SliderFloat("Z", &f, 0, 2.0f);
+	//		}
+	//	}
+	//	if (e == 1)
+	//	{
+	//		if (scene.GetModelCount() > 0)
+	//		{
+	//			ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).translatex, -680, 680);
+	//			ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).translatey, -340, 340);
+	//			ImGui::SliderFloat("Z", &f, -340, 340);
+	//		}
+	//	}
+	//	if (e == 2)
+	//	{
+	//		if (scene.GetModelCount() > 0)
+	//		{
+	//			//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
+	//			ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).rotate, -360.0f, 360.0f);
+	//		}
+	//	}
+	//	if (ImGui::Button("Close Me"))
+	//		local = false;
+	//	ImGui::End();
+	//}
 
-	if(world)
-	{
-		static float f = 1.0f;
-		ImGui::Begin("World transformations");
-		static int e = 0;
-		ImGui::RadioButton("scale", &e, 0); ImGui::SameLine();
-		ImGui::RadioButton("translate", &e, 1); ImGui::SameLine();
-		ImGui::RadioButton("rotate", &e, 2);
-		if (e == 0)
-		{
-			if (scene.GetModelCount() > 0)
-			{
-				ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).Wscalex, 0, 2.0f);
-				ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).Wscaley, 0, 2.0f);
-				ImGui::SliderFloat("Z", &f, 0, 2.0f);
-			}
-		}
-		if (e == 1)
-		{
-			if (scene.GetModelCount() > 0)
-			{
-				ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).Wtranslatex, -680, 680);
-				ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).Wtranslatey, -340, 340);
-				ImGui::SliderFloat("Z", &f, -340, 340);
-			}
-		}
-		if (e == 2)
-		{
-			if (scene.GetModelCount() > 0)
-			{
-				//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
-				ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).Wrotate, -360.0f, 360.0f);
-			}
-		}
-		if (ImGui::Button("Close Me"))
-			world = false;
-		ImGui::End();
-	}
+	//if(world)
+	//{
+	//	static float f = 1.0f;
+	//	ImGui::Begin("World transformations");
+	//	static int e = 0;
+	//	ImGui::RadioButton("scale", &e, 0); ImGui::SameLine();
+	//	ImGui::RadioButton("translate", &e, 1); ImGui::SameLine();
+	//	ImGui::RadioButton("rotate", &e, 2);
+	//	if (e == 0)
+	//	{
+	//		if (scene.GetModelCount() > 0)
+	//		{
+	//			ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).Wscalex, 0, 2.0f);
+	//			ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).Wscaley, 0, 2.0f);
+	//			ImGui::SliderFloat("Z", &f, 0, 2.0f);
+	//		}
+	//	}
+	//	if (e == 1)
+	//	{
+	//		if (scene.GetModelCount() > 0)
+	//		{
+	//			ImGui::SliderFloat("X", &scene.GetModel(scene.GetActiveModelIndex()).Wtranslatex, -680, 680);
+	//			ImGui::SliderFloat("Y", &scene.GetModel(scene.GetActiveModelIndex()).Wtranslatey, -340, 340);
+	//			ImGui::SliderFloat("Z", &f, -340, 340);
+	//		}
+	//	}
+	//	if (e == 2)
+	//	{
+	//		if (scene.GetModelCount() > 0)
+	//		{
+	//			//ImGui::SliderFloat("X", &scene.GetModel(0).translatex, -680, 680);
+	//			ImGui::SliderFloat("rotate", &scene.GetModel(scene.GetActiveModelIndex()).Wrotate, -360.0f, 360.0f);
+	//		}
+	//	}
+	//	if (ImGui::Button("Close Me"))
+	//		world = false;
+	//	ImGui::End();
+	//}
 
 
 	// 3. Show another simple window.

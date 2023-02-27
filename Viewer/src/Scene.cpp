@@ -18,9 +18,13 @@ int Scene::GetModelCount() const
 	return mesh_models.size();
 }
 
-MeshModel& Scene::GetModel(int index) const
+//MeshModel& Scene::GetModel(int index) const
+//{
+//	return *mesh_models[index];
+//}
+std::shared_ptr<MeshModel> Scene::GetModel(int index) const
 {
-	return *mesh_models[index];
+	return mesh_models[index];
 }
 
 MeshModel& Scene::GetActiveModel() const

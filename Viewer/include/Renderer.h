@@ -14,6 +14,7 @@ class Renderer
 public:
 	Renderer(int viewportWidth, int viewportHeight);
 	virtual ~Renderer();
+	//void Render(const std::shared_ptr<Scene>& scene);
 	void Render(const std::shared_ptr<Scene>& scene);
 	void SwapBuffers();
 	void ClearColorBuffer(const glm::vec3& color);

@@ -83,7 +83,7 @@ public:
 	void ScaleWorld(double factor);
 
 	GLuint GetVAO() const;
-private:
+//private:
 	/*std::vector<Face> faces;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;

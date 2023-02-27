@@ -92,3 +92,7 @@ Load and compile a vertex and fragment shader program using InitShader and make 
             }
         }
     }
+ 
+ ## Implement Phong shading in the fragment shader.
+ ![image](https://user-images.githubusercontent.com/116717525/221672729-5f4a1fdd-c445-4462-8044-9ef5c8537a6c.png)
+![image](https://user-images.githubusercontent.com/116717525/221672812-e65e38cf-3e09-4c2b-acd9-5f8f5078d935.png)

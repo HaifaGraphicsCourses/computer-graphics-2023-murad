@@ -26,3 +26,13 @@ Load and compile a vertex and fragment shader program using InitShader and make 
     {
         gl_Position = projection * view *  model * vec4(pos, 1.0f);
     }
+
+## fragment shader
+#version 330 core
+
+    out vec4 frag_color;
+
+    void main()
+    {
+        frag_color = vec4(0.5,0.5,0.5,1);
+    }

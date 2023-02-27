@@ -38,32 +38,57 @@ Load and compile a vertex and fragment shader program using InitShader and make 
     }
 
 ## In the renderer, update all the relevant vertex attributes and uniforms
-void Renderer::Render(const std::shared_ptr<Scene>& scene)
+
+   void Renderer::Render(const std::shared_ptr<Scene>& scene)
     {
         int half_width = viewport_width / 2;
+ 
         int half_height = viewport_height / 2;
+ 
         int camera_count = scene->GetCameraCount();
+ 
         if (camera_count > 0)
+ 
         {
+ 
             int model_count = scene->GetModelCount();
+ 
             if (model_count > 0)
+ 
             {
+ 
                 const Camera& active = scene->GetActiveCamera();
+ 
                 for (int index = 0; index < model_count; index++)
+                                                        
                 {
+                                                        
                     std::shared_ptr<MeshModel> current = scene->GetModel(index);
+ 
                     colorShader.use();
+ 
                     colorShader.setUniform("model", current->GetWorldTransformation()*current->GetModelTransformation());
+ 
                     colorShader.setUniform("view", active.GetViewTransformation());
+ 
                     colorShader.setUniform("projection", active.GetProjectionTransformation());
+ 
                     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+ 
                     glBindVertexArray(current->GetVAO());
+ 
                     glDrawArrays(GL_TRIANGLES, 0, current->GetModelVertices().size());
+ 
                     glBindVertexArray(0);
+ 
                     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+ 
                     glBindVertexArray(current->GetVAO());
+ 
                     glDrawArrays(GL_TRIANGLES, 0, current->GetModelVertices().size());
+ 
                     glBindVertexArray(0);
+ 
                 }
             }
         }

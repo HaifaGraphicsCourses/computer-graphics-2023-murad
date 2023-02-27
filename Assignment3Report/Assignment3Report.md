@@ -58,11 +58,11 @@ Load and compile a vertex and fragment shader program using InitShader and make 
  
                 const Camera& active = scene->GetActiveCamera();
  
-                for (int index = 0; index < model_count; index++)
+                for (int currentModelIndex = 0; currentModelIndex < modelCount; currentModelIndex++)
                                                         
                 {
                                                         
-                    std::shared_ptr<MeshModel> current = scene->GetModel(index);
+                    std::shared_ptr<MeshModel> current = scene->GetModel(currentModelIndex);
  
                     colorShader.use();
  

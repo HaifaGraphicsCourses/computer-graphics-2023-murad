@@ -8,3 +8,21 @@ Load and compile a vertex and fragment shader program using InitShader and make 
 ![image](https://user-images.githubusercontent.com/116717525/221362867-fc75c34a-8554-4fcb-ad41-62d10546a6b8.png)
 ![image](https://user-images.githubusercontent.com/116717525/221362899-1670717c-dad4-42c7-b843-320a92691777.png)
 
+## vertex shader
+#version 330 core
+
+    layout(location = 0) in vec3 pos;
+    layout(location = 1) in vec3 normal;
+    layout(location = 2) in vec2 texCoords;
+
+ 
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+
+    out vec3 color;
+
+    void main()
+    {
+        gl_Position = projection * view *  model * vec4(pos, 1.0f);
+    }

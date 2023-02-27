@@ -8,8 +8,8 @@ Load and compile a vertex and fragment shader program using InitShader and make 
 ![image](https://user-images.githubusercontent.com/116717525/221362867-fc75c34a-8554-4fcb-ad41-62d10546a6b8.png)
 ![image](https://user-images.githubusercontent.com/116717525/221362899-1670717c-dad4-42c7-b843-320a92691777.png)
 
-## vertex shader
-#version 330 core
+## Write a vertex shader that applies all the transformations
+
 
     layout(location = 0) in vec3 pos;
     layout(location = 1) in vec3 normal;
@@ -27,8 +27,7 @@ Load and compile a vertex and fragment shader program using InitShader and make 
         gl_Position = projection * view *  model * vec4(pos, 1.0f);
     }
 
-## fragment shader
-#version 330 core
+## Write a fragment shader that only outputs a constant color and paste it in the report
 
     out vec4 frag_color;
 
